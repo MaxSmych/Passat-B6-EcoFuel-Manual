@@ -261,6 +261,12 @@ a{color:var(--acc);text-decoration:none;transition:color .15s ease}
 a:hover{color:#7dd3fc;text-decoration:underline}
 .star{color:var(--warn);font-weight:700}
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Passat B6">
+<meta name="theme-color" content="#07090e">
 </head>
 <body>
 
@@ -1269,6 +1275,11 @@ function buildChecks(){
 
 q.addEventListener('input',render);
 render();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
 </script>
 </body>
 </html>
