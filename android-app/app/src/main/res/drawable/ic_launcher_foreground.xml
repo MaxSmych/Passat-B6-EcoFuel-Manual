@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Blue VW Passat styled badge / Car symbol -->
+    <path
+        android:fillColor="#5AA9FF"
+        android:pathData="M38,36L70,36A8,8 0 0,1 78,44L82,54A6,6 0 0,1 84,59L84,72A4,4 0 0,1 80,76L78,76A4,4 0 0,1 74,72L74,70L34,70L34,72A4,4 0 0,1 30,76L28,76A4,4 0 0,1 24,72L24,59A6,6 0 0,1 26,54L30,44A8,8 0 0,1 38,36ZM33,52L75,52L72.5,44A3,3 0 0,0 69.5,42L38.5,42A3,3 0 0,0 35.5,44L33,52ZM35,62A4,4 0 1,0 35,54A4,4 0 0,0 35,62ZM73,62A4,4 0 1,0 73,54A4,4 0 0,0 73,62Z" />
+</vector>

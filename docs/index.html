@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Passat B6">
+<meta name="theme-color" content="#171a21">
+<title>Passat B6 EcoFuel — рабочий мануал</title>
+<style>
+:root{
+  --bg:#07090e;
+  --panel:rgba(18, 23, 34, 0.85);
+  --panel-solid:#121722;
+  --panel2:#1a2130;
+  --panel-hover:#242e42;
+  --line:rgba(255,255,255,0.08);
+  --line-focus:rgba(56,189,248,0.5);
+  --tx:#f8fafc;
+  --dim:#94a3b8;
+  --faint:#64748b;
+  --acc:#38bdf8;
+  --acc-glow:rgba(56,189,248,0.35);
+  --acc-grad:linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+  --warn:#fbbf24;
+  --warn-glow:rgba(251,191,36,0.3);
+  --bad:#f43f5e;
+  --bad-glow:rgba(244,63,94,0.3);
+  --ok:#34d399;
+  --ok-glow:rgba(52,211,153,0.3);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--tx);min-height:100vh}
+body{
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;
+  -webkit-text-size-adjust:100%;
+  background-attachment:fixed;
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% -20%, rgba(37,99,235,0.22), transparent 75%),
+    radial-gradient(circle at 10% 20%, rgba(56,189,248,0.08), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(99,102,241,0.08), transparent 45%);
+}
+header{
+  position:sticky;top:0;z-index:40;
+  background:rgba(10,13,20,0.88);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(255,255,255,0.09);
+  padding:14px 16px 12px;
+  box-shadow:0 10px 30px -5px rgba(0,0,0,0.6);
+}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.h1{font-size:16px;font-weight:700;letter-spacing:.3px;margin:0;display:flex;align-items:center;gap:10px}
+.car-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg, rgba(56,189,248,0.16) 0%, rgba(37,99,235,0.12) 100%);
+  border:1px solid rgba(56,189,248,0.35);
+  color:var(--acc);font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;
+  box-shadow:0 0 16px rgba(56,189,248,0.2);
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);animation:pulse-anim 2s infinite}
+@keyframes pulse-anim{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.25)}}
+
+.h1-sub{color:var(--dim);font-size:12px;font-weight:400;margin-top:3px;letter-spacing:.2px}
+
+.search-wrap{position:relative;width:100%;margin-bottom:12px}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--dim);pointer-events:none}
+#q{
+  width:100%;padding:12px 38px 12px 42px;font-size:15px;
+  border:1px solid var(--line);border-radius:14px;
+  background:var(--panel2);color:var(--tx);outline:none;
+  transition:all .22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+}
+#q::placeholder{color:var(--faint)}
+#q:focus{
+  border-color:var(--acc);
+  box-shadow:0 0 0 3px var(--acc-glow), inset 0 2px 4px rgba(0,0,0,0.2);
+  background:#1c2333;
+}
+.clear-btn{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,0.1);border:0;color:var(--dim);
+  width:22px;height:22px;border-radius:50%;cursor:pointer;
+  display:none;align-items:center;justify-content:center;font-size:12px;
+  transition:all .15s;
+}
+.clear-btn:hover{background:rgba(255,255,255,0.2);color:#fff}
+
+nav{
+  display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+nav button{
+  flex:0 0 auto;padding:8px 15px;font-size:13px;font-weight:600;
+  border-radius:999px;cursor:pointer;
+  background:var(--panel2);color:var(--dim);
+  border:1px solid var(--line);
+  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+  transition:all .18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+nav button:hover{background:var(--panel-hover);color:var(--tx);border-color:rgba(255,255,255,0.15)}
+nav button:active{transform:scale(0.95)}
+nav button.on{
+  background:var(--acc-grad);color:#fff;
+  border-color:transparent;
+  box-shadow:0 4px 18px rgba(37,99,235,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+main{padding:16px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr);max-width:1440px;margin:0 auto}
+@media(min-width:900px){ main{grid-template-columns:repeat(2,minmax(0,1fr))} .wide{grid-column:1/-1} }
+
+.card{
+  background:var(--panel);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:18px;
+  padding:20px 22px;min-width:0;overflow:hidden;overflow-wrap:anywhere;
+  box-shadow:0 12px 32px -6px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+  transition:all .22s ease;
+  position:relative;
+}
+.card:hover{
+  border-color:rgba(255,255,255,0.15);
+  box-shadow:0 16px 40px -6px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
+  transform:translateY(-2px);
+}
+.card h2{margin:0 0 8px;font-size:18px;font-weight:700;letter-spacing:.2px;color:#fff}
+.card .sub{color:var(--dim);font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
+th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+td:first-child{white-space:nowrap}
+th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.7px;background:rgba(255,255,255,0.025)}
+td{min-width:0}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:rgba(255,255,255,0.025)}
+@media(max-width:560px){table{font-size:13px} th,td{padding:8px 8px}}
+
+code,kbd{
+  background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);
+  color:#7dd3fc;border-radius:7px;padding:3px 7px;
+  font:12.5px/1.3 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-weight:600;cursor:pointer;
+  white-space:nowrap;
+  transition:all .15s ease;
+  display:inline-block;
+}
+code:hover,kbd:hover{
+  background:rgba(56,189,248,0.22);
+  border-color:var(--acc);
+  box-shadow:0 0 12px var(--acc-glow);
+  transform:translateY(-1px);
+}
+code:active,kbd:active{transform:scale(0.95)}
+
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  padding:4px 10px;border-radius:999px;
+  border:1px solid rgba(56,189,248,0.3);background:rgba(56,189,248,0.1);
+  color:var(--acc);margin:0 4px 4px 0;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.warn{
+  border-left:4px solid var(--warn);
+  background:linear-gradient(90deg, rgba(251,191,36,0.1) 0%, rgba(251,191,36,0.03) 100%);
+  border-top:1px solid rgba(251,191,36,0.2);
+  border-right:1px solid rgba(251,191,36,0.2);
+  border-bottom:1px solid rgba(251,191,36,0.2);
+  padding:14px 16px;border-radius:12px;margin:14px 0;font-size:13.5px;line-height:1.6;
+  color:#fef3c7;box-shadow:0 4px 16px -2px rgba(0,0,0,0.3);
+}
+.bad{
+  border-left-color:var(--bad);
+  background:linear-gradient(90deg, rgba(244,63,94,0.12) 0%, rgba(244,63,94,0.03) 100%);
+  border-color:rgba(244,63,94,0.25);border-left-width:4px;
+  color:#ffe4e6;box-shadow:0 4px 16px -2px rgba(244,63,94,0.15);
+}
+.ok{
+  border-left-color:var(--ok);
+  background:linear-gradient(90deg, rgba(52,211,153,0.12) 0%, rgba(52,211,153,0.03) 100%);
+  border-color:rgba(52,211,153,0.25);border-left-width:4px;
+  color:#d1fae5;box-shadow:0 4px 16px -2px rgba(52,211,153,0.15);
+}
+
+b.hl{
+  background:rgba(56,189,248,0.4);color:#fff;
+  border-radius:4px;padding:0 4px;
+  box-shadow:0 0 10px rgba(56,189,248,0.6);
+}
+ul,ol{margin:10px 0;padding-left:22px}
+li{margin:5px 0}
+
+/* Чек-лист и кнопки управления */
+.cl-header-actions{
+  display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;
+}
+.btn-action{
+  padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--tx);
+  transition:all .18s ease;box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+.btn-action:hover{background:var(--panel-hover);border-color:rgba(255,255,255,0.18);transform:translateY(-1px)}
+.btn-action:active{transform:scale(0.96)}
+.btn-action.primary{
+  background:var(--acc-grad);color:#fff;border-color:transparent;
+  box-shadow:0 4px 16px rgba(37,99,235,0.4);
+}
+
+.chk{
+  display:flex;gap:14px;align-items:flex-start;padding:12px 8px;
+  border-bottom:1px solid var(--line);
+  transition:all .15s ease;border-radius:10px;
+}
+.chk:hover{background:rgba(255,255,255,0.03)}
+.chk:last-child{border:0}
+.chk input[type=checkbox]{
+  width:22px;height:22px;margin-top:2px;flex:0 0 auto;
+  accent-color:var(--acc);cursor:pointer;
+  border-radius:6px;
+}
+.chk .t{flex:1;font-size:14.5px;font-weight:500;transition:all .18s}
+.chk .n{color:var(--dim);font-size:12px;display:block;margin-top:3px;font-weight:400}
+.chk input[type=text]{
+  width:96px;height:34px;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--panel2);color:var(--acc);
+  font:13.5px ui-monospace,"SF Mono",Menlo,monospace;text-align:center;font-weight:700;
+  outline:none;transition:all .18s ease;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.3);
+}
+.chk input[type=text]:focus{
+  border-color:var(--acc);background:#1e2636;
+  box-shadow:0 0 0 2px var(--acc-glow), inset 0 2px 4px rgba(0,0,0,0.2);
+}
+.done{opacity:.4;text-decoration:line-through;filter:grayscale(60%)}
+
+/* Всплывающее уведомление Тост */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:rgba(18,23,34,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(56,189,248,0.4);color:#fff;
+  padding:10px 20px;border-radius:999px;font-size:13.5px;font-weight:600;
+  box-shadow:0 8px 30px rgba(0,0,0,0.6), 0 0 20px var(--acc-glow);
+  opacity:0;transition:all .25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index:999;display:flex;align-items:center;gap:8px;pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+#none{display:none;color:var(--dim);padding:50px 20px;text-align:center;grid-column:1/-1;font-size:15px}
+footer{color:var(--faint);font-size:12px;text-align:center;padding:30px 16px 50px;line-height:1.7}
+a{color:var(--acc);text-decoration:none;transition:color .15s ease}
+a:hover{color:#7dd3fc;text-decoration:underline}
+.star{color:var(--warn);font-weight:700}
+</style>
+</head>
+<body>
+
+<div id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span id="toast-text">Скопировано в буфер</span>
+</div>
+
+<header>
+  <div class="header-top">
+    <div>
+      <div class="h1">Passat B6 EcoFuel <span class="car-badge"><span class="pulse"></span> CDGA 1.4 TSI</span></div>
+      <div class="h1-sub">DSG-7 DQ200 0AM · Passat Variant 3C, 2010 м.г.</div>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input id="q" type="search" placeholder="Поиск: P3366, 241.1, форсунки, редуктор, ключи…" autocomplete="off">
+    <button id="clear-search" class="clear-btn" title="Очистить">✕</button>
+  </div>
+  <nav id="nav"></nav>
+</header>
+
+<main id="out"></main>
+<div id="none">Ничего не найдено. Попробуйте короче: <code>P33</code>, <code>187</code>, <code>катушк</code></div>
+
+<footer>
+  Собрано из SSP 425, ELSA, TPI и логов этой машины. <span class="star">*</span> — данные с форумов.<br>
+  Работает без интернета. Отметки в чек-листах сохраняются в браузере.
+</footer>
+
+<script>
+const D = [
+/* ---------- КАНАЛЫ ---------- */
+{s:'Каналы', t:'Газ — давление', tags:'187 241 газ давление редуктор рампа G401 G400 бар',
+ h:`<table><tr><th>Канал</th><th>Что</th><th>Норма / замечание</th></tr>
+ <tr><td><code>187.2</code></td><td>Давление газа <b>до</b> редуктора</td><td>в баллонах; max 200 бар при 15 °C, резерв &lt; 30</td></tr>
+ <tr><td><code>187.3</code></td><td>Давление газа <b>после</b> редуктора</td><td><b>норма 5–9 бар</b>; шкала канала 0–15 бар. <b>В нашем логе 10,20 — выше нормы</b></td></tr>
+ <tr><td><code>241.1</code></td><td><b>Запрашиваемое ЭБУ давление</b></td><td>главный канал: сравнить с фактом</td></tr>
+ <tr><td><code>241.2</code></td><td>После редуктора</td><td>дубль 187.3</td></tr>
+ <tr><td><code>241.3</code></td><td>До редуктора</td><td>дубль 187.2</td></tr></table>
+ <div class="warn">Смотреть <code>241.1</code> и <code>187.3</code> <b>одновременно</b>.<br>
+ Просит 6, а по факту 10,2 → регулятор не держит, дело в механике N372.<br>
+ Просит 10 и получает 10 → дело в логике или датчике G401, а не в клапане.</div>`},
+
+{s:'Каналы', t:'Бензин и пропуски', tags:'140 15 16 пропуски misfire ТНВД давление бензин P0302 цилиндр',
+ h:`<table><tr><th>Канал</th><th>Что</th><th>Норма</th></tr>
+ <tr><td><code>140.3</code></td><td>Давление бензина</td><td>рабочее <b>49–150 бар</b>. <b>4–7 бар</b> = высокого нет вовсе, это только насос в баке</td></tr>
+ <tr><td><code>15.1–15.3</code></td><td>Пропуски, цилиндры 1–3</td><td><b>15.2 — наш P0302</b></td></tr>
+ <tr><td><code>15.4</code></td><td>Система распознавания пропусков</td><td>включается только при <b>ОЖ &gt; 80 °C</b></td></tr>
+ <tr><td><code>16.1</code></td><td>Пропуски, цилиндр 4</td><td></td></tr></table>
+ <div class="warn"><b>Проверка ТНВД <span class="star">*</span></b><br>
+ ХХ — <b>50 атм</b>; резкое ускорение в гору — до <b>121</b>.<br>
+ Заглушить с ХХ, сразу зажигание, «обновить»: давление медленно растёт до 80, потом падает до 50 — норма.
+ Сразу падает → течь ТНВД в масло, форсунки или перепускной клапан.<br>
+ <b>Газ отключить и выработать остаток</b> — на газе ТНВД ведёт себя необычно.<br>
+ Косвенный признак: расход газа на ХХ ниже <b>0,4 кг/ч</b> → ТНВД течёт в масло.</div>`},
+
+{s:'Каналы', t:'Мотор и охлаждение', tags:'93 214 131 240 цепь натяжитель температура радиатор термостат',
+ h:`<table><tr><th>Канал</th><th>Что</th></tr>
+ <tr><td><code>93.1</code> / <code>214</code></td><td>Угол натяжителя цепи ГРМ (в 214 ещё и обороты — удобнее)</td></tr>
+ <tr><td><code>131.1</code></td><td>Температура ОЖ на выходе из двигателя</td></tr>
+ <tr><td><code>131.2</code></td><td>Температура ОЖ на выходе из радиатора</td></tr>
+ <tr><td><code>240.1</code></td><td>Пробег двигателя</td></tr>
+ <tr><td>блок 09, гр. <code>30</code></td><td>Напряжение бортсети</td></tr></table>
+ <div class="warn"><b>Проверка радиатора по 131 <span class="star">*</span></b><br>
+ На ХХ вентиляторы включаются при <b>87 °C</b>, выключаются при <b>76 °C</b>.
+ В движении температура после радиатора резко падает (при +17 за бортом — до 20–30 °C), на остановке растёт.
+ Если так — радиатор исправен, причина в двухконтурном теплообменнике.</div>`},
+
+{s:'Каналы', t:'Принудительно газ / бензин', tags:'243 244 242 базовые установки переключить режим топлива',
+ h:`<table><tr><th>Группа</th><th>Действие</th></tr>
+ <tr><td><code>243</code></td><td>Перевести на <b>газ</b></td></tr>
+ <tr><td><code>244</code></td><td>Перевести на <b>бензин</b></td></tr>
+ <tr><td><s><code>242</code></s></td><td><b>НЕ ТРОГАТЬ</b> <span class="star">*</span></td></tr></table>
+ <div class="warn ok">Официальная функция VW: SSP 425 прямо пишет, что в базовых установках группой 243 переключаются в газовый режим, 244 — в бензиновый, и что это полезно при поиске неисправностей.<br>
+ Блок 01 → Базовые установки. Даёт снять оба режима подряд в одинаковых условиях, не дожидаясь штатных условий перехода.</div>`},
+
+{s:'Каналы', t:'DSG — каналы и износ сцеплений', tags:'DSG DQ200 0AM коробка мехатроник сцепление адаптация 95 115 износ',
+ h:`<table><tr><th>Канал</th><th>Что</th></tr>
+ <tr><td><code>30</code></td><td>Давление в мехатронике</td></tr>
+ <tr><td><code>41</code></td><td>Название прошивки</td></tr>
+ <tr><td><code>84</code></td><td>Символы 4,5,6 — буквы коробки</td></tr>
+ <tr><td><code>109.1</code></td><td>Пробег (ещё в тормозах <code>162.3</code>)</td></tr>
+ <tr><td><code>62</code></td><td>Демонтажное положение мехатроника</td></tr></table>
+ <div class="sub" style="margin-top:10px">Адаптация сцеплений <span class="star">*</span> — диск 1 / диск 2:</div>
+ <table><tr><th>Д1</th><th>Д2</th><th>Параметр</th></tr>
+ <tr><td>95.1</td><td>115.1</td><td>Выход штока, где теряется сцепление</td></tr>
+ <tr><td>95.3</td><td>115.3</td><td>Выход штока до точки 1</td></tr>
+ <tr><td>96.1</td><td>116.1</td><td>Выход штока до точки 2</td></tr>
+ <tr><td>96.2</td><td>116.2</td><td>Момент в точке 2</td></tr>
+ <tr><td>96.3</td><td>116.3</td><td>Выход штока до точки 3 (полная фиксация)</td></tr>
+ <tr><td>98.1</td><td>118.1</td><td>Коэффициент трения — <b>должен быть 1</b></td></tr>
+ <tr><td>98.4</td><td>118.4</td><td>Максимальная температура</td></tr>
+ <tr><td>99.1–102.3</td><td>119.1–122.3</td><td>Наработка по температурам: до 100, 100–150, 151–200, 200–250, 250–300, 300–350, свыше 350 °C</td></tr></table>
+ <div class="warn"><b>Остаток дисков:</b> первый = <code>96.2 − 97.3</code>, второй = <code>116.2 − 117.3</code>.<br>
+ Большая наработка выше 250 °C — сцепления жгли.</div>`},
+
+{s:'Каналы', t:'Лямбда и адаптация смеси на газе', tags:'188 31 14 15 лямбда качество газа адаптация пропуски смесь',
+ h:`<table><tr><th>Канал</th><th>Что</th><th>Норма</th></tr>
+ <tr><td><code>031.1</code> / <code>031.2</code></td><td>Лямбда (факт / запрос)</td><td>около <b>1.000</b> (0.95–1.05)</td></tr>
+ <tr><td><code>188.1</code></td><td>Лямбда в режиме работы на газе</td><td><b>0.97–1.03</b></td></tr>
+ <tr><td><code>188.4</code></td><td>Счётчик адаптации качества газа</td><td>требуется <b>60.00 с</b> (в логе машины 29.00 с)</td></tr>
+ <tr><td><code>014.3</code></td><td>Суммарный счётчик пропусков</td><td><b>0</b> во всех цилиндрах</td></tr>
+ <tr><td><code>015.2</code></td><td>Счётчик пропусков цил. 2</td><td><b>наш P0302</b> (включается при ОЖ &gt; 80 °C)</td></tr></table>
+ <div class="warn"><b>Как добрать 60 секунд качества газа:</b> ехать ровно в диапазоне 2500–3500 об/мин под средней нагрузкой без резких сбросов газа. Вне диапазона счётчик останавливается. Пока не набрано 60 с — мотор всегда запускается на бензине и долго думает перед переходом на газ.</div>`},
+
+
+/* ---------- КОДЫ ---------- */
+{s:'Коды', t:'P3366 — Тест пылезащитной пробки (TPI 2033761/2)', tags:'P3366 пробка TPI 2033761 дефект ПО редуктор давление',
+ h:`<div class="warn bad"><b>Главная экспресс-проверка: делать в первую очередь (5 минут, бесплатно)!</b></div>
+ По официальному бюллетеню VW <code>TPI 2033761/2</code> при ошибке P3366 нужно визуально осмотреть <b>резиновую пылезащитную пробку</b> в регуляторе давления газа:
+ <ul>
+ <li><b>Пробка на месте</b> → по вердикту VW <i>«никакие другие работы не требуются»</i>! Дефект вызван кратковременным программным скачком давления при пуске. Редуктор исправен!</li>
+ <li><b>Пробки нет (выдавило)</b> → давление превысило предел аварийного сброса (~16 бар). Предписана замена регулятора или переборка запирающей пары N372.</li>
+ </ul>
+ <div class="warn ok">Официального обновления ПО для блока <code>03C 906 021 A</code> версии 6580 нет (6580 — последняя версия ветки B6). Поэтому при целой пробке ошибку сбрасывают и контролируют <code>187.3</code> и <code>241.1</code>.</div>`},
+
+{s:'Коды', t:'Сервисные акции завода по VIN', tags:'акции 20I7 баллоны отзывные безопасность коррозия дилер',
+ h:`<table><tr><th>Акция / Кампания</th><th>Узлы под замену</th><th>Значение для нас</th></tr>
+ <tr><td><b>20I7</b></td><td>Напорная топливная магистраль + <b>все 4 бензиновые форсунки</b></td><td>Прямо предписано проверять в TPI 2036234 при пропусках на бензине. Если не делалась — закрывает проблему P0302/P305A!</td></tr>
+ <tr><td><b>Отзывная по баллонам</b></td><td>Газовые баллоны высокого давления</td><td>Кампании 2012, 2016, 2017 по Passat EcoFuel из-за коррозии. Проверить у дилера по VIN своего автомобиля</td></tr></table>
+ <div class="warn bad"><b>Техника безопасности:</b> даже когда стрелка на приборке на нуле («баллон пуст»), в контуре высокого давления остаётся <b>около 12 бар</b>! Всегда сбрасывать давление через базовые установки перед снятием трубок.</div>`},
+
+{s:'Коды', t:'P3366 — давление газа слишком высокое', tags:'P3366 13158 давление газа высокое редуктор N372 TPI 2015627',
+ h:`<div class="warn bad"><b>Есть на машине.</b> VAG-код <code>013158</code>. Записан на 245 269 км, 925 об/мин, нагрузка 25,1 %, скорость 1 км/ч, 48 °C, 970 мбар, 14,097 В.<br>
+ Наступил <b>на 36 секунд позже</b> пропусков — то есть порядок «пропуски → давление газа», а не наоборот.</div>
+ <b>Что это механически.</b> Понижение с 20 до 5–9 бар держится <b>только на паре «шарик — седло»</b> во второй ступени. Износ или грязь → клапан не закрывается, давление растёт при исправной электрике. Ошибок по N372 при этом нет — и их действительно нет.
+ <ul>
+ <li>Предохранительный клапан открывается при <b>~16 бар</b>. У нас 10,2 — до сброса не дошло, пробка на месте. Ранняя стадия.</li>
+ <li><span class="star">*</span> Частая неисправность этих машин: редуктор не держит, излишки идут через предохранительный клапан и выдавленные прокладки.</li>
+ <li><span class="star">*</span> Характерно: проблемы <b>после стоянки 3–5 часов</b>.</li>
+ </ul>
+ <div class="warn">Официально (TPI 2015627/9 по кодам 13158 P3366 / 13159 P3367) предписана <b>замена регулятора</b>. Фиксируем, но работаем ремонтом.</div>`},
+
+{s:'Коды', t:'P0302 + P305A — пропуски', tags:'P0302 P305A 000770 012378 пропуски цилиндр 2 бензин misfire форсунки',
+ h:`<div class="warn bad"><b>Есть на машине.</b> <code>P305A</code> (012378) «режим на бензине — пропуски» и <code>P0302</code> (000770) «цилиндр 2».</div>
+ Оба записаны <b>в одно событие</b>: 245 269 км, 662 об/мин, нагрузка 25,1 %, 47 °C, 970 мбар, 13,843 В, время совпадает до секунды.
+ <ul>
+ <li><b>Пропуски зафиксированы в бензиновом режиме.</b> Газовые пропуски логируются другими кодами (13153/13156) — их нет.</li>
+ <li>Система распознавания пропусков работает только при <b>ОЖ выше 80 °C</b> (канал 15.4).</li>
+ <li><span class="star">*</span> Известен случай: <code>P3366</code> вместе с пропусками, на холодную на газе не заводится, троит — <b>помогла промывка форсунок</b>, а не редуктор.</li>
+ </ul>
+ <div class="warn">Вывод: связка «давление газа + пропуски» — повторяющийся паттерн. Сначала снять данные по обоим контурам, потом трогать редуктор.</div>`},
+
+{s:'Коды', t:'P0033 — перепускной клапан турбины', tags:'P0033 000051 N249 турбина перепускной клапан рециркуляции',
+ h:`<div class="warn"><b>Есть на машине</b>, но <b>отдельная нить</b>. VAG <code>000051</code>.</div>
+ Записан на 245 238 км — на 31 км раньше газовых, при холодном моторе (ОЖ 24 °C), 1255 об/мин, 26,3 %, 14,351 В.
+ <p>Это электрическая неисправность клапана рециркуляции турбонагнетателя <b>N249</b>. Он крепится к корпусу турбины, открывается при сбросе газа, замыкая напор и всасывание. При негерметичности падает давление наддува, при отказе — шумы при сбросе.</p>
+ <div class="warn">С газовой связкой по времени и условиям не связан — разбирать отдельным заходом.</div>`},
+
+{s:'Коды', t:'Коды прочих блоков — не диагностировать', tags:'01304 01305 блок 19 56 магнитола android B11EE 42 стеклоподъёмник',
+ h:`<table><tr><th>Блок</th><th>Код</th><th>Что делать</th></tr>
+ <tr><td>19</td><td><code>01304</code> магнитола — нет связи</td><td rowspan="3"><b>Ничего.</b> Штатное головное устройство снято, стоит китайская Android-магнитола. Она не эмулирует блок 56 на диагностической шине</td></tr>
+ <tr><td>19</td><td><code>01305</code> шина Infotainment</td></tr>
+ <tr><td>56</td><td>соединение не установлено</td></tr>
+ <tr><td>42</td><td><code>B11EE</code> перегрев электродвигателя заднего стеклоподъёмника</td><td>непостоянно, 239 214 км, к теме не относится</td></tr></table>
+ <div class="warn">Готовность мониторов <code>0110 0001</code> — большинство тестов не пройдено: память недавно сбрасывалась либо циклы не накатаны.</div>`},
+
+{s:'Коды', t:'Прочие коды', tags:'P2177 переобеднение смеси код ошибки',
+ h:`<table><tr><th>Код</th><th>Значение</th></tr>
+ <tr><td><code>P2177</code></td><td>Переобеднение смеси начиная с оборотов ХХ <span class="star">*</span></td></tr>
+ <tr><td><code>P0071</code></td><td>Датчик наружной температуры G17 — был в сканах 2025 г., сейчас нет</td></tr>
+ <tr><td><code>P0513</code></td><td>Неверный ключ — был 30.10.2025, после сброса чисто</td></tr></table>
+ <div class="warn"><b>Правило:</b> формулировка кода ≠ неисправный узел. P3366 — это то, что увидел ЭБУ, а не приговор редуктору.</div>`},
+
+/* ---------- ПРОЦЕДУРЫ ---------- */
+{s:'Процедуры', t:'Форсунки: зелёная точка и присадка G 001 780 M3', tags:'форсунки 2029155 зеленая точка присадка G001780M3 бензин промывка',
+ h:`<div class="sub">Решение по пропускам P0302 / P305A согласно TPI 2029155/3 и 2036234/3:</div>
+ <ul>
+ <li><b>Ревизия форсунок:</b> форсунки <b>без зелёной маркировочной точки</b> и с датой выпуска до <code>0472</code> подлежат замене. Оптимизированные форсунки маркируются <b>зелёной точкой</b>.</li>
+ <li><b>Снятая форсунка повторно не ставится</b> — деформируется уплотнительное тефлоновое кольцо (монтаж только со спецнабором <code>T10133</code> / <code>T10510</code>).</li>
+ <li><b>Химическая промывка в бак:</b> оригинальная присадка <code>G 001 780 M3</code> заливается в бензобак, после чего требуется непрерывная поездка <b>выше 3000 об/мин на бензине</b>.</li>
+ <li>Принудительный перевод в бензиновый режим для прожига: блок 01 → Базовые установки → группа <code>244</code>.</li>
+ <li><b>Свечи зажигания:</b> только спецсвечи для CNG — иридиевый центральный электрод <b>0,6 мм</b> и платиновый боковой. Обычные бензиновые свечи в газовом режиме быстро пробивает из-за высокого напряжения ионизации.</li>
+ </ul>`},
+
+{s:'Процедуры', t:'Турбина и клапан N249 (P0033)', tags:'турбина BorgWarner 03C145701S 03C145702R N249 байпас перепускной наддув P0033',
+ h:`<table><tr><th>Артикул BorgWarner</th><th>Оригинальный номер VAG</th><th>Применяемость</th></tr>
+ <tr><td><code>5303 970 0151</code></td><td><code>03C 145 701 S</code></td><td>1.4 TSI CNG CDGA 110 кВт (с 12.2007)</td></tr>
+ <tr><td><code>5303 988 0249</code></td><td><code>03C 145 702 R</code></td><td>1.4 TSI CNG CDGA 110 кВт (с 03.2011)</td></tr>
+ <tr><td>—</td><td><code>03C 145 703 B</code></td><td>актуальная замена VAG</td></tr></table>
+ <div class="warn"><b>Клапан рециркуляции N249 (ошибка P0033):</b><br>
+ Крепится тремя винтами к холодной части турбины. Проверить сопротивление обмотки (норма <b>~11–14 Ом</b>), целостность электроразъёма и состояние внутренней резиновой мембраны (при надрыве мембраны турбина недодувает, слышен стравливающий свист под сброс газа).</div>`},
+
+{s:'Процедуры', t:'Редуктор: что под пробками и как чистить', tags:'редуктор ventrex пробки ключ 8 разборка чистка фильтр сетка N372 промывка ремонт',
+ h:`<table><tr><th>Ключ</th><th>Узел</th></tr>
+ <tr><td><b>8</b> шестигр.</td><td><b>Две фронтальные пробки:</b> верхняя — 2-я ступень (клапан N372), нижняя — 1-я ступень (поршень, пружина, кольца)</td></tr>
+ <tr><td><b>18</b></td><td>Штуцер высокого давления — <b>под ним сетчатый фильтр</b></td></tr>
+ <tr><td><b>24</b></td><td>Электромагнитный клапан N372 в сборе</td></tr>
+ <tr><td><b>27</b></td><td>Датчик давления в баллоне G400</td></tr>
+ <tr><td><b>12</b></td><td>Штуцеры контура охлаждения</td></tr>
+ <tr><td>5, 6 шестигр.</td><td>Винты с пружинами</td></tr></table>
+ <div class="warn bad"><b>Перед разборкой обязательно:</b>
+ <ol><li>Стравить газ: тестер → «Сброс давления в газопроводе высокого давления»</li>
+ <li>Закрыть вентили баллонов маховичком <code>T50026</code> (1 и 2, затем 3)</li>
+ <li>Снять разъёмы, отвернуть магистрали, пережать шланги ОЖ зажимами <code>3094</code></li></ol></div>
+ <b>Почему забивается <span class="star">*</span>:</b> на АГНКС газ идёт через компрессоры в масле, плюс тосол и конденсат; при заправке рвутся колечки заправочного пальца, микрочастицы под 200 атм летят внутрь.
+ <div class="warn ok"><b>Начать с фильтра заправочного штуцера</b> — это намотанная на конус тонкая проволока. Чистится иглой, снимать ничего не надо.</div>
+ <b>Уплотнения <span class="star">*</span>:</b> в газовый тракт только <b>FPM</b> (фторкаучук, до 230 °C), <b>NBR</b> — на антифриз и клапан. NBR в газ ставить нельзя.
+ <div class="warn"><span class="star">*</span> Если после чистки давление уходит вверх снова за день-два — это уже износ запирающей пары, а не уплотнений.</div>`},
+
+{s:'Процедуры', t:'Редуктор: моменты затяжки (ELSA)', tags:'моменты затяжки редуктор трубки накидные гайки G400 20 Нм 8 Нм',
+ h:`<table><tr><th>Узел</th><th>Момент</th></tr>
+ <tr><td>Датчик G400</td><td><b>20 Н·м</b></td></tr>
+ <tr><td>Штуцеры (поз. 12, 13)</td><td><b>20 Н·м</b></td></tr>
+ <tr><td>Крепёжный винт, гайка</td><td><b>8 Н·м</b></td></tr>
+ <tr><td>Сайлент-блоки (поз. 10)</td><td>от руки</td></tr>
+ <tr><td>Накидные гайки трубок</td><td>от руки, затем довернуть</td></tr></table>
+ <div class="warn bad"><b>Доворот зависит от даты трубки</b> (выбита кодом со стрелкой):<br>
+ до <code>10E</code> включительно → <b>+90°</b><br>
+ начиная с <code>10F</code> → <b>+180°</b><br>
+ Только для трубок, которые ещё не устанавливались.</div>
+ Шланги ОЖ снимать клещами <code>VAS 6340</code>.`},
+
+{s:'Процедуры', t:'Форсунки: артикулы и правила', tags:'форсунки уплотнения кольца артикулы 03C129717 catalog прокладка коллектор снятие',
+ h:`<table><tr><th>Позиция</th><th>Артикул</th><th>Примечание</th></tr>
+ <tr><td>Кольцо форсунки 7,52×3,53</td><td>Bosch <code>1280210752</code><br>Elring <code>893889</code></td><td>газовая верх + бензиновая, 5 шт</td></tr>
+ <tr><td>Прокладка коллектора, резина, 4 шт</td><td><code>03C 129 717 A</code></td><td>Corteco 450095H, VR 71-36068-00, Elring 528.140</td></tr>
+ <tr><td>Прокладка коллектора, жесть, 1 шт</td><td><code>03C 129 717 C</code></td><td><b>менять обязательно</b></td></tr>
+ <tr><td>Уплотнение трубки компрессора</td><td><code>03C 145 288 B</code></td><td>E-type ring, закладывать в заказ вместе с прокладками</td></tr>
+ <tr><td>Клапаны под метан</td><td>Freccia <code>R6776/SARNT</code> впуск<br><code>R6777/BMARNT</code> выпуск</td><td>для метана отдельные, обычные от 1.4 TSI не подходят</td></tr></table>
+ <div class="warn bad"><b>Снятая форсунка подлежит замене</b> — повторно не ставится.</div>
+ <ul><li>Инструмент: <code>V.A.G 1331</code>, набор <code>T10133</code> (съёмник /3, захват /15, щётка /4)</li>
+ <li>Доступ: воздушный фильтр → блоки J808 и J338 → впускной коллектор и его нижняя часть</li>
+ <li>При установке — <b>новый пружинный элемент</b>; кольца смочить чистым моторным маслом</li>
+ <li><b>Тефлоновое кольцо смазывать нельзя</b></li>
+ <li>Форсунка входит рукой, без усилия; винты нижней части коллектора — <b>20 Н·м</b></li></ul>`},
+
+{s:'Процедуры', t:'ODIS: порядок работы', tags:'ODIS GFF ведомая диагностика чтение ошибок DTC план проверок клон VAS5054',
+ h:`<div class="warn bad"><b>GFF стирает коды при выходе!</b> Сначала сохранить автоскан Васей и выгрузить список кодов (<code>А/М - DTC</code>), только потом запускать ведомый поиск. Стоп-кадры второй раз не появятся.</div>
+ <ol>
+ <li>Зажигание <b>включено</b>, двигатель не заведён. Вход занимает несколько минут — это нормально, прервать нельзя</li>
+ <li>Запуск диагностики → VIN подтягивается сам; не вышло — ручной ввод (GMD)</li>
+ <li>Галку ведомого поиска <b>оставить</b>, иначе это обычная самодиагностика</li>
+ <li>Читать ошибки: вкладка <code>А/М - DTC</code> — общий список по машине</li>
+ <li>GFF строит план проверок; расширить вручную можно через столбец «TPI вручную» + «Расширение плана диагностики» — работает офлайн</li>
+ <li>Идти по шагам: значения измерять своими приборами и вводить в поля</li>
+ </ol>
+ <table><tr><th>Вкладка</th><th>Функция</th></tr>
+ <tr><td><code>01 - MW</code></td><td>Измеряемые величины</td></tr>
+ <tr><td><code>01 - BAS</code></td><td>Базовые установки (сюда 243/244)</td></tr>
+ <tr><td><code>01 - SGT</code></td><td>Диагностика исполнительных механизмов</td></tr>
+ <tr><td><code>09 - ESP</code></td><td>Регистратор событий блока</td></tr></table>
+ <div class="warn">Серый блок в списке — это либо «нет по комплектации», либо «не отвечает из-за неисправности», по цвету не различить. В схеме топологии красный = есть ошибки. Статус статичен до пересканирования.<br>
+ Вернуться и перезапустить план с раннего шага <b>нельзя</b> — только продолжить с самого дальнего.</div>`},
+
+{s:'Процедуры', t:'Мехатроник DQ200 <span class="star">*</span>', tags:'мехатроник DSG установка штоки 29 мм демонтаж коробка',
+ h:`<ul>
+ <li>Перед установкой выставить штоки штангенциркулем на <b>29 мм</b> от корпуса; все передачи — в нейтрали. Тогда вилки попадают без подгонки</li>
+ <li>Антифриз можно не сливать: открутить болт электронасоса охлаждения — патрубки отодвигаются к радиатору</li>
+ <li>Без ямы: подставить снизу, поднять за клемму из-под капота, вставить ровно. Не сел — вытащить и заново выставить штоки</li>
+ <li><b>Лёгкий демонтаж без сканера:</b> заглушить в режиме <code>D</code>, отключить АКБ и только потом перевести в <code>P</code>. Тогда не нужно демонтажное положение в 62-й группе</li>
+ </ul>`},
+
+{s:'Процедуры', t:'Катушки газовых клапанов — мультиметром', tags:'катушки N361 N362 N363 сопротивление 12 Ом проверка клапаны баллонов мультиметр',
+ h:`<div class="warn ok">Номинал катушки на баллоне: <b>≈12 Ом</b> (встречается 8,0–9,0 Ом) <span class="star">*</span>.<br>
+ Обмотка редуктора: провод <b>0,4 мм</b>, <b>673 витка</b> <span class="star">*</span>.</div>
+ Прозвонить катушки запорных клапанов <b>N361–N363</b> обычным мультиметром. Обрыв или сильно заниженное сопротивление — клапан не откроется, и это видно до всякого сканера.
+ <div class="warn"><b>Штатная проверка от ЭБУ (SSP 425):</b> раз за цикл движения, близко к ХХ, ЭБУ закрывает клапаны баллонов <b>на 4 секунды</b> — давление должно упасть. Не падает → минимум один клапан негерметичен.<br>
+ Это объясняет рост давления на стоянке: если и N372 подтекает, и клапаны не держат — к рампе постоянно подпирает высокое.</div>`},
+
+/* ---------- КОДИРОВКИ ---------- */
+{s:'Кодировки', t:'Свет', tags:'кодировки свет американский ДХО ПТФ габариты coming home ксенон яркость блок 09',
+ h:`<div class="sub">Блок 09 → Кодирование 07 → Длинное кодирование. <b>Записать исходное значение!</b></div>
+ <table><tr><th>Что</th><th>Где</th></tr>
+ <tr><td>«Американский свет»</td><td>байт <b>0</b>, бит <b>4</b></td></tr>
+ <tr><td>То же через ПТФ</td><td>байт <b>17</b>, бит <b>4</b></td></tr>
+ <tr><td>ДХО с яркостью через ПТФ</td><td>байт <b>20</b>, бит <b>1</b> (значение = %)</td></tr>
+ <tr><td>Яркость задних габаритов</td><td>байт <b>12</b> (по умолч. 15; 50 — ярче)</td></tr>
+ <tr><td>Задние ПТФ как стопы</td><td>байт <b>21</b>, бит <b>4</b></td></tr>
+ <tr><td>Поворотники с габаритами</td><td>байт <b>7</b> = яркость, напр. 20 %</td></tr>
+ <tr><td>ДХО через габариты</td><td>байт <b>21</b> = <code>00000110</code></td></tr>
+ <tr><td>Убрать центральные габариты сзади</td><td>байт <b>9</b> = все нули</td></tr>
+ <tr><td>Отключить холодную проверку ближнего</td><td>байт 3 бит 4 вкл; байт 19 бит 0 снять; байт 18 — ПТФ</td></tr>
+ <tr><td>Контроль подсветки номера <span class="star">*</span></td><td>байт <b>17</b>, бит <b>7</b> (не проверено)</td></tr>
+ <tr><td>Яркость подсветки ног</td><td>адаптация, канал <b>05</b>, 20–100 %</td></tr>
+ <tr><td><b>Coming Home</b> — вернуть старый алгоритм</td><td>байт <b>23</b>, бит <b>5</b> — <b>снять галочку</b></td></tr></table>`},
+
+{s:'Кодировки', t:'Комфорт, замки, ключи', tags:'кодировки блок 46 17 53 ключи привязка стёкла дождь автохолд ремень центральный замок',
+ h:`<table><tr><th>Что</th><th>Где</th></tr>
+ <tr><td>Закрыть заведённый авто вторым ключом</td><td>46 → байт <b>13</b>, бит <b>1</b></td></tr>
+ <tr><td>Разблокировка ЦЗ при выключении зажигания</td><td>46 → байт <b>0</b>, бит <b>3</b></td></tr>
+ <tr><td>Автоблокировка на 15 км/ч</td><td>46 → байт <b>0</b>, бит <b>4</b></td></tr>
+ <tr><td>Закрывание стёкол при дожде</td><td>46 → байт <b>9</b>; <b>плюс</b> то же в блоке датчика дождя (09 → сменить блок на RLS)</td></tr>
+ <tr><td>Комфортное закрытие стёкол</td><td>46 → байт 6: биты 1,2,3,6; байт 7: 1,4,5,6</td></tr>
+ <tr><td>Автохолд с непристёгнутым ремнём</td><td>53 → логин <code>25194</code> → адаптация, канал <b>07</b>: 1 → 0</td></tr>
+ <tr><td>Убрать напоминание о ремне</td><td>17 → код <code>00??х05</code>: 01 колодки + 02 ремень + 04 омыватель. Было 07 → ставим <b>05</b></td></tr>
+ <tr><td><b>Привязать ключ</b></td><td>46 → адаптация 10 → канал <b>01</b> = 1 → сохранить → <b>15 с</b> на нажатие кнопки</td></tr>
+ <tr><td>Стереть все ключи</td><td>46 → адаптация 10 → канал <b>00</b></td></tr>
+ <tr><td>Bluetooth блока телефона</td><td>77 → кодирование <code>412120</code>, затем адаптация — очистить профили</td></tr>
+ <tr><td>Сброс адаптации DSG «под водителя»</td><td>Зажигание вкл, газ в пол <b>30 секунд</b>, отпустить, зажигание выкл</td></tr></table>
+ <div class="warn">Частота ключей этой машины — <b>433,92–434,42 МГц</b> (PR-код 5D1).</div>`},
+
+{s:'Кодировки', t:'Задние колодки при EPB', tags:'колодки задние EPB блок 53 развести свести адаптация базовые настройки',
+ h:`<div class="sub">Электромеханический стояночный тормоз есть (PR-код UH2, блок 53, ЭБУ 5N0 907 801).</div>
+ <table><tr><th>Шаг</th><th>Действие</th></tr>
+ <tr><td>Развести колодки</td><td>53 → базовые настройки <code>04</code> → группа <b>007</b></td></tr>
+ <tr><td>Свести колодки</td><td>53 → базовые настройки <code>04</code> → группа <b>006</b></td></tr>
+ <tr><td>Адаптация</td><td>53 → базовые настройки <code>04</code> → группа <b>010</b></td></tr></table>`},
+
+/* ---------- МАШИНА ---------- */
+{s:'Машина', t:'Памятка по брендам автозапчастей', tags:'запчасти бренды качество INA Lemforder Victor Reinz Kolbenschmidt Topran Febi',
+ h:`<table><tr><th>Узел / система</th><th>Что брать (оригинал / топ-качество)</th><th>Чего избегать (брак / упаковщики)</th></tr>
+ <tr><td><b>Ремень и ролики ГРМ</b></td><td><code>Contitech</code>, <code>Gates</code>, <code>Dayco</code> · ролики: <code>INA</code>, <code>SKF</code>, <code>Lemforder</code></td><td>Febi, Ruville, Meyle</td></tr>
+ <tr><td><b>Прокладки и сальники</b></td><td><code>Victor Reinz</code>, <code>Elring</code> (Франция), <code>Glaser</code></td><td>Topran, Ajusa, Elring (Германия)</td></tr>
+ <tr><td><b>Масляные / возд. фильтры</b></td><td><code>Knecht (Mahle)</code>, <code>MANN</code>, <code>BOSCH</code>, <code>Kolbenschmidt</code></td><td>Filtron, Hans Pries, Sfec, Alco</td></tr>
+ <tr><td><b>Подвеска и подушки ДВС</b></td><td><code>Lemforder</code>, <code>BOGE</code>, <code>Corteco</code></td><td>Febi, Meyle, Topran, Hans Pries</td></tr>
+ <tr><td><b>Поршни, кольца, вкладыши</b></td><td><code>Kolbenschmidt</code>, <code>Mahle</code>, <code>Nural</code>, <code>Goetze</code></td><td>Autowelt</td></tr>
+ <tr><td><b>Гидрокомпенсаторы</b></td><td><code>INA</code> (идут в заводском оригинале)</td><td>Ajusa</td></tr>
+ <tr><td><b>Амортизаторы капота / багажника</b></td><td><code>Stabilus</code> (в оригинале VAG)</td><td>Dello, Meyle</td></tr></table>`},
+
+{s:'Машина', t:'Паспорт и что стоит', tags:'VIN комплектация PR коды двигатель CDGA DQ200 sportline швеция ксенон',
+ h:`<table>
+ <tr><td>Выпуск</td><td>15.01.2010</td></tr>
+ <tr><td>Двигатель</td><td><b>D42</b>: 1.4 л / 110 кВт 16V TSI <b>CNG</b>, узел <code>03C.L</code>, мотор CDGA, ЭБУ Bosch MED 17.1</td></tr>
+ <tr><td>ПО блока 01</td><td><code>03C 906 021 A</code>, компонент <code>4414 CNG N10G71 G 6580</code> → версия <b>6580</b></td></tr>
+ <tr><td>КПП</td><td><b>0EG + G1C</b>: DSG-7 <b>DQ200</b>, ПО <code>0AM 300 048 N</code></td></tr>
+ <tr><td>Стояночный тормоз</td><td><b>UH2</b> — электромеханический</td></tr>
+ <tr><td>Свет</td><td><b>8BV</b> ксенон + <b>8Q6</b> AFS 2 + <b>8X1</b> омыватель фар</td></tr>
+ <tr><td>Колёса</td><td><b>CN9</b> 7J×16 ET45, шины <b>H2F</b> 205/55 R16 91H</td></tr>
+ <tr><td>Питание</td><td><b>J0L+NY2</b> АКБ 70 А·ч, генератор <b>8GU</b> 140 А</td></tr>
+ <tr><td>Комплектация</td><td><b>WSL</b> Sportline, <b>B07</b> шведская спецификация</td></tr></table>
+ <div class="warn"><b>Чего НЕТ</b> — не искать при диагностике: управляемого термостата (QS0), старт-стоп и рекуперации (7L3), контроля давления шин (7K0), ПТФ (8WA), навигации (7Q0), люка (3FA), ТСУ (1D0).<br>
+ <b>Головное устройство заменено</b> на китайскую Android-магнитолу (с завода RCD 310).</div>`},
+
+{s:'Машина', t:'История и опорные цифры', tags:'история пробег компрессия 2023 заказ-наряд катализатор маховик мехатроник',
+ h:`<table><tr><th>Дата</th><th>Пробег</th><th>Что</th></tr>
+ <tr><td>09.10.2025</td><td>233 720</td><td>чисто</td></tr>
+ <tr><td>13–15.10.2025</td><td>233 740</td><td>P0071 датчик наружной температуры</td></tr>
+ <tr><td>30.10.2025</td><td>234 010</td><td>P0513, после сброса чисто</td></tr>
+ <tr><td><b>06.09.2026</b></td><td><b>245 270</b></td><td><b>P0033, P0302, P305A, P3366</b></td></tr></table>
+ <div class="warn ok"><b>Все четыре кода появились за 11 260 км</b> от последнего чистого скана, а по стоп-кадрам — в последние <b>30 км</b>. Это свежее событие, а не постепенная деградация.<br>
+ Версия ПО за год не менялась (6580) → перепрошивки не было, версия «долгий переход на газ после прошивки» отпадает.</div>
+ <b>Заказ-наряд 22.03.2023, пробег 199 226:</b>
+ <ul><li><b>Компрессия 11–12 бар — норма.</b> Опорная точка: пропуски 2026 года не наследие 2023-го</li>
+ <li>Катализатор — «недостаточная эффективность» уже тогда</li>
+ <li>Маховик требует замены; следы масла по корпусу мехатроника; течь на стыке КПП/ДВС</li></ul>
+ <div class="warn">Часы блока 01 сбиты (пишут 2021 год) — привязка событий только по пробегу и времени суток.</div>`},
+
+{s:'Машина', t:'Нормы газовой системы (SSP 425)', tags:'нормы давление баллоны 200 бар рампа 5-9 переход на газ условия адаптация качества газа',
+ h:`<table><tr><th>Параметр</th><th>Норма</th></tr>
+ <tr><td>Давление в рампе (2-я ступень, N372)</td><td><b>5–9 бар</b></td></tr>
+ <tr><td>После 1-й ступени</td><td>~20 бар (механически)</td></tr>
+ <tr><td>Предохранительный клапан</td><td>открывается при <b>~16 бар</b></td></tr>
+ <tr><td>Впрыск газа</td><td>5 бар до средних нагрузок, 9 бар в верхнем диапазоне</td></tr>
+ <tr><td>Баллоны</td><td>max <b>200 бар</b> при 15 °C, резерв &lt; 30 бар, ёмкость 21 кг</td></tr></table>
+ <b>Условия перехода на газ:</b> лямбда активна + холодный пуск завершён + <b>ОЖ &gt; 10 °C</b> + <b>&gt; 100 с</b> после пуска (после заправки — не позднее 540 с). Возврат на газ возможен дважды.
+ <div class="warn"><b>Холодный пуск ниже 10 °C:</b> мотор идёт на бензине при <b>закрытом</b> клапане ВД, газ подмешивается ~<b>15 %</b>; после выработки газа из магистрали клапаны <b>60 секунд</b> греются полным напряжением против залипания; только затем открывается клапан ВД.<br>
+ <b>Аварийная стратегия:</b> не удалось запуститься в одном режиме за <b>4–8 с</b> → пуск в другом. Долгий пуск — это она, а не отдельная поломка.</div>
+ <div class="warn bad"><b>Адаптация качества газа:</b> нужно <b>60 с</b> в среднем диапазоне нагрузок. В нашем логе — <b>29 с</b>, не добрана. Вне диапазона счётчик стоит.</div>`},
+
+{s:'Машина', t:'Артикулы и размеры', tags:'артикулы размеры подшипник кондиционер колёса домик АКБ коврики лягушка',
+ h:`<table><tr><th>Позиция</th><th>Номер / размер</th></tr>
+ <tr><td>Подшипник шкива кондиционера <span class="star">*</span></td><td>35 × 52 × 22</td></tr>
+ <tr><td>Колёса <span class="star">*</span></td><td>5×112, ЦО 57,1, вылет 43 <i>(по PR-коду CN9 — ET45, сверять)</i></td></tr>
+ <tr><td>Домик АКБ: крышка</td><td><code>3C0 915 443 A</code></td></tr>
+ <tr><td>Домик АКБ: перед / зад</td><td><code>3C0 915 335</code> / <code>3C0 915 336 A</code></td></tr>
+ <tr><td>Коврики перед</td><td><code>3C1 864 435 D</code> / <code>3C1 864 436 D</code> EUN</td></tr>
+ <tr><td>Коврики зад</td><td><code>3C0 864 451</code> / <code>3C0 864 452</code> UCV</td></tr>
+ <tr><td>Лягушка тормоза (новая)</td><td><code>5G0 698 459</code></td></tr>
+ <tr><td>Катушка магнитного клапана</td><td><code>2K0 959 975 B</code></td></tr>
+ <tr><td>Регулятор давления (подбор 2023)</td><td><code>3C0 906 011 E</code></td></tr></table>`},
+
+/* ---------- TPI ---------- */
+{s:'TPI', t:'TPI прицельно по нашему мотору', tags:'TPI бюллетени CDGA 1.4 газ сводка список', wide:1,
+ h:`<div class="sub">Папка <code>tpi/1.4_cdga/</code> — 15 бюллетеней, отобранных под 1.4 TSI EcoFuel.</div>
+ <table><tr><th>TPI</th><th>Тема</th></tr>
+ <tr><td>2026691/2</td><td>Двигатель: неустойчивая работа или Check Engine, событие <b>P0106</b></td></tr>
+ <tr><td>2020997/2</td><td>Сводка (см. также «Контрольная лампа ОГ, ошибка 13222 / P33A6»)</td></tr>
+ <tr><td>2020998/1, 2026832/1, 2026863/1, 2027516/1</td><td>Сводки по мотору</td></tr>
+ <tr><td>2029972/1, 2030450/1, 2031559/1</td><td>Сводки по мотору</td></tr>
+ <tr><td>2033551/3, 2033758/2, 2033760/2, 2033761/2</td><td>Сводки по мотору</td></tr>
+ <tr><td>2036234/3</td><td>Сводка по мотору</td></tr>
+ <tr><td>2015433/12</td><td>Функции комфорта задних дверей после разрядки батареи</td></tr></table>
+ <div class="warn">Открывать из <code>tpi/1.4_cdga/</code>. Номер TPI можно вбить в ODIS вручную и расширить им план проверок.</div>`},
+
+{s:'TPI', t:'TPI по газовой системе', tags:'TPI газ баллон клапан течь опустошение 3361 2029499 2022722 2013702 Ventrex прошивка', wide:1,
+ h:`<table><tr><th>Документ</th><th>О чём</th></tr>
+ <tr><td><code>TPI 2029499/10</code></td><td><b>Травит вдоль клапанов на горячую, на газу</b> (код 3361)</td></tr>
+ <tr><td><code>Запорный клапан баллона</code></td><td>обнаружена течь</td></tr>
+ <tr><td><code>TPI 2022722/4</code></td><td>Опустошение баллона</td></tr>
+ <tr><td><code>TPI 2013702/8</code></td><td><b>Плохо запускается на холодную или глохнет после холодного пуска</b> (EcoFuel, мотор BSX)</td></tr>
+ <tr><td><code>TPI 2025405/1</code></td><td>Глохнет на бензине в области резерва</td></tr>
+ <tr><td><code>TPI 2021549/7</code></td><td>Обновление прошивки ЭБУ под Ventrex</td></tr>
+ <tr><td>TPI 2015627/9</td><td><b>13158 P3366 / 13159 P3367</b> — предписана замена регулятора. У нас нет файла, номер известен</td></tr></table>
+ <div class="warn">Бюллетени с пометкой <code>bsx</code> — про мотор BSX (Touran/Caddy). Логика газовой части родственная, но узлы и прошивки другие.</div>`},
+
+{s:'TPI', t:'TPI по мотору, пропускам и прочему', tags:'TPI пропуски форсунки цепь ГРМ маховик интеркулер белый дым помпа стартер',
+ h:`<table><tr><th>Документ</th><th>О чём</th></tr>
+ <tr><td><code>TPI 2060791/8</code></td><td><b>Диагностика пропусков на бензиновом моторе</b> — прямо по нашему P0302</td></tr>
+ <tr><td><code>TPI 2029155/3</code></td><td>Плохие бензиновые форсунки</td></tr>
+ <tr><td><code>Плохо заводится после стоянки</code></td><td>и неравномерно работает после холодного пуска</td></tr>
+ <tr><td><code>TPI 2025206/6</code></td><td>Проверка цепи ГРМ</td></tr>
+ <tr><td><code>TPI 2019833/6</code></td><td>Диагностика маховика — в 2023 г. отмечен под замену</td></tr>
+ <tr><td><code>TPI 2032641/3</code></td><td>Конденсат и лёд в шлангах интеркулера</td></tr>
+ <tr><td><code>TPI 2035742/1</code></td><td>Белый дым из трубы</td></tr>
+ <tr><td><code>TPI 2012623/22</code></td><td>Визг шкива помпы — <b>переведён в markdown</b></td></tr>
+ <tr><td><code>TPI 2019908/8</code></td><td>Не запускается, стартер не вращается</td></tr>
+ <tr><td><code>Глохнет при трогании на подъём</code></td><td>—</td></tr></table>`},
+
+/* ---------- ELSA ---------- */
+{s:'Процедуры', t:'ELSA — официальные процедуры VW', tags:'ELSA процедуры контур высокого давления измерение давления газа рампа нагнетатель ТНВД', wide:1,
+ h:`<div class="sub">Папка <code>elsa/</code> — 17 процедур. Ключевые для нас:</div>
+ <table><tr><th>Документ</th><th>О чём</th></tr>
+ <tr><td><code>24-3-2</code></td><td><b>Измерение давления в газовой системе</b> — главная процедура по нашей теме</td></tr>
+ <tr><td><code>24-3-1-1</code> / <code>24-3-1-2</code></td><td>Контуры высокого и низкого давления</td></tr>
+ <tr><td><code>24-3-3</code></td><td>Определение текущего режима работы</td></tr>
+ <tr><td><code>24-3-4</code></td><td>Выключение и включение газового режима</td></tr>
+ <tr><td><code>24-4</code></td><td>Газовая рампа с клапанами <b>N366–N369</b></td></tr>
+ <tr><td><code>24-2-2</code></td><td>Сброс давления — <b>делать перед любой разборкой</b></td></tr>
+ <tr><td><code>24-2-3</code> / <code>24-2-4</code></td><td>Форсунки и их уплотнения</td></tr>
+ <tr><td><code>24-8-2</code></td><td>ТНВД</td></tr>
+ <tr><td><code>21-3-3</code></td><td>Прокладка приводного нагнетателя (компрессора)</td></tr></table>
+ <div class="warn ok">Плюс 55 страниц ELSA по газовым баллонам, регулятору N372, датчику G400 и клапанам N361–N363 — в <code>ecofuel/elsa-газовые-баллоны/</code></div>`},
+
+/* ---------- DSG ---------- */
+{s:'DSG', t:'Коробка 0AM (DQ200) — что важно знать', tags:'DSG DQ200 0AM сухое сцепление мехатроник масло 02E отличие',
+ h:`<table>
+ <tr><td>Тип</td><td><b>0AM = DQ200</b>, 7 ступеней, <b>сухое</b> сцепление</td></tr>
+ <tr><td>ПО / АО</td><td><code>0AM 300 048 N</code> / <code>0AM 927 769 D</code></td></tr>
+ <tr><td>PR-коды</td><td><b>0EG</b> спецкомплект DQ200, <b>G1C</b> 7-ступенчатая, <b>0G7</b> Tiptronic</td></tr>
+ <tr><td>Статус в скане</td><td>ошибок нет</td></tr></table>
+ <div class="warn bad"><b>Не путать с 02E (DQ250)</b> — это 6 ступеней и <b>мокрое</b> сцепление, другой мехатроник, другое масло и другие процедуры. Материалы по 02E из библиотеки удалены намеренно.</div>
+ <b>Что известно по истории:</b> в 2023 г. на 199 226 км отмечены «маховик требует замены» и «следы масла по корпусу мехатроника», плюс течь на стыке КПП/ДВС.
+ <div class="warn">Документы: <code>основной по 0AM</code> (224 стр., англ.),
+ <code>ремонт мехатроника</code>,
+ <code>SSP 390</code>, <code>SSP 094</code>,
+ <code>TPI: шумы при переключении на 3-ю</code>,
+ <code>TPI 2037031/1: ходы штоков сцеплений</code>.</div>`},
+
+/* ---------- ЭЛЕКТРИКА ---------- */
+{s:'Электрика', t:'Стояночный тормоз EPB — состав', tags:'EPB J540 V282 V283 стояночный тормоз предохранители G200 G202 G251 блок 53',
+ h:`<div class="sub">На машине есть (PR-код <b>UH2</b>), блок 53, ЭБУ <code>5N0 907 801</code>, статус OK.</div>
+ <table><tr><th>Обозначение</th><th>Компонент</th></tr>
+ <tr><td><code>J540</code></td><td>Блок управления EPB</td></tr>
+ <tr><td><code>V282</code> / <code>V283</code></td><td>Исполнительный электродвигатель левый / правый</td></tr>
+ <tr><td><code>G200</code></td><td>Датчик поперечного ускорения</td></tr>
+ <tr><td><code>G202</code></td><td>Датчик скорости поворота</td></tr>
+ <tr><td><code>G251</code></td><td>Датчик продольного ускорения</td></tr>
+ <tr><td><code>J104</code></td><td>Блок ABS</td></tr></table>
+ <b>Питание:</b> предохранители <code>SC29</code>, <code>SC30</code> (блок C); <code>SD2</code>, <code>SD30</code>, <code>SD31</code> (блок D).
+ Масса — точка 688 на центральном тоннеле. CAN-привод: <code>B384</code> (High), <code>B391</code> (Low).
+ <div class="warn">В схеме есть ветки «только для двигателей BLF, BLR, BLY, BSE, BSF, BYT, BZB, CAXC» — <b>нашего CDGA там нет</b>, эти цепи не наши. Ветки «только с МКП» — тоже не наши, у нас DSG.</div>`},
+
+{s:'Электрика', t:'Предохранители и блок бортсети', tags:'предохранители цвета маркировка ампер J519 блок 09 длинное кодирование байт',
+ h:`<table><tr><th>Ток</th><th>Цвет</th><th>Ток</th><th>Цвет</th></tr>
+ <tr><td>50 A</td><td>красный</td><td>15 A</td><td>синий</td></tr>
+ <tr><td>40 A</td><td>оранжевый</td><td>10 A</td><td>красный</td></tr>
+ <tr><td>30 A</td><td>зелёный</td><td>7,5 A</td><td>коричневый</td></tr>
+ <tr><td>25 A</td><td>белый</td><td>5 A</td><td>бежевый</td></tr>
+ <tr><td>20 A</td><td>жёлтый</td><td>3 A</td><td>сиреневый</td></tr></table>
+ <div class="sub" style="margin-top:10px">Блок бортсети <b>J519</b> (адрес 09): длина кодировки зависит от индекса блока</div>
+ <table><tr><th>Длина</th><th>Индексы <code>3C0 937 049</code></th></tr>
+ <tr><td>21 байт</td><td>без индекса, A, B, D, F — Medium; C, E, G — Highend</td></tr>
+ <tr><td>23 байта</td><td>H, K, M, P, R, T, AB, AD, AF — Medium; J, L, Q, S, AA, AC, AE, AG — Highend</td></tr>
+ <tr><td>30 байт</td><td>AH, AK, 3C8…A, D, G — Medium; AJ, AL, 3C8…E, F, R, S — Highend</td></tr></table>
+ <div class="warn">Схемы: <code>предохранители (38 картинок)</code>,
+ <code>газовая часть</code>,
+ <code>электросхемы CDGA</code>,
+ <code>CDGA WDS</code>.</div>`},
+
+/* ---------- ПРОСТАВКИ ---------- */
+{s:'Процедуры', t:'Проставки подвески — размеры', tags:'проставки подвеска текстолит резина чертёж размеры болты М8',
+ h:`<table><tr><th></th><th>Передняя (текстолит)</th><th>Задняя (резина)</th></tr>
+ <tr><td>Габарит</td><td>⌀148</td><td>фланец ⌀100 × 20</td></tr>
+ <tr><td>Отверстие</td><td>⌀78</td><td>колодец ⌀45 → ⌀32, глубина <b>25</b></td></tr>
+ <tr><td>Крепёж / бобышка</td><td>3 × ⌀10 по ⌀127 (R63,5), болты <b>М8 × (26 + t)</b></td><td>бобышка ⌀54*, высота h</td></tr>
+ <tr><td>Не задано в оригинале</td><td>толщина <b>t</b></td><td>высота бобышки <b>h</b></td></tr></table>
+ <div class="warn">* ⌀54 — при удалении штатной резинки; если штатная остаётся — 45 мм.<br>
+ Колодец глубже фланца: дно на 5 мм ниже нижней плоскости, внутри бобышки.</div>
+ <div class="warn ok">Чертежи: <code>передняя PDF</code> · <code>задняя PDF</code> · <code>описание</code></div>`},
+
+/* ---------- БИБЛИОТЕКА ---------- */
+{s:'Библиотека', t:'Куда идти за ответом', tags:'библиотека каталог навигация файлы где лежит документы', wide:1,
+ h:`<table><tr><th>Вопрос</th><th>Куда</th></tr>
+ <tr><td>Что за машина, какие опции, что заказывать</td><td><code>car/VIN-комплектация.md</code></td></tr>
+ <tr><td>Что уже ремонтировали, какая была компрессия</td><td><code>car/README.md</code></td></tr>
+ <tr><td>Как устроен газ, давления, чем меряется</td><td><code>ecofuel/README.md</code></td></tr>
+ <tr><td><b>Редуктор: устройство, пробки, чистка</b></td><td><code>ecofuel/Редуктор N372…md</code></td></tr>
+ <tr><td>Каналы, кодирование, версия прошивки</td><td><code>diag/README.md</code></td></tr>
+ <tr><td>Форсунки, катушки, ГРМ, артикулы</td><td><code>engine/README.md</code></td></tr>
+ <tr><td>Предохранители, EPB, блок бортсети</td><td><code>electrical/README.md</code></td></tr>
+ <tr><td>Коробка</td><td><code>dsg/README.md</code></td></tr>
+ <tr><td>Теория, устройство узлов</td><td><code>ssp/README.md</code> — 42 программы самообучения</td></tr>
+ <tr><td>Кодировки и приёмы</td><td><code>practice/Кодировки, каналы и приёмы.md</code></td></tr>
+ <tr><td>ODIS: порядок работы</td><td><code>files/ИНСТРУКЦИЯ-ODIS.md</code></td></tr>
+ <tr><td>Вася: как снять лог</td><td><code>files/ИНСТРУКЦИЯ-Вася-Диагност.md</code></td></tr>
+ <tr><td>План диагностики</td><td><code>files/ПЛАН-ДИАГНОСТИКИ.md</code></td></tr>
+ <tr><td>Полная опись библиотеки</td><td><code>КАТАЛОГ.md</code></td></tr></table>`},
+
+{s:'Библиотека', t:'Чему верить в первую очередь', tags:'достоверность источники первоисточник расхождения оговорки',
+ h:`<ol>
+ <li><b>Логи</b> <code>log/</code> — факт о состоянии машины. Не править</li>
+ <li><b>SSP 425</b> — VW по газовой системе</li>
+ <li><b>ELSA</b> — процедуры VW</li>
+ <li><b>TPI</b> — официальные решения по известным дефектам</li>
+ <li><b>PR-коды</b> — что стоит с завода</li>
+ </ol>
+ <div class="warn bad"><b>Оговорки — где ошибиться легко:</b>
+ <ul>
+ <li><code>ecofuel/Обзор системы</code> — это <b>1.4 TSI 125 кВт с MED 9.5.10</b>, у нас 110 кВт и MED 17.1. Общая часть по наддуву применима, калибровки нет</li>
+ <li><code>diag/Группы диагностики…</code> — написан про мотор <b>с ДМРВ</b>, которого у CDGA нет</li>
+ <li><code>Метановые редукторы Ventrex</code> — черновик, обрывается</li>
+ <li><code>files/vw_1.4tsi_cdga_p2626_knowledge_base.md</code> — <b>устарело</b>: про код P2626, которого на машине нет</li>
+ <li>SSP <b>358</b> (расходомер HFM) и <b>424</b> (SCR) — не про нашу машину</li>
+ </ul></div>`},
+
+{s:'Каналы', t:'Лямбда-зонды — как проверить Васей', tags:'лямбда зонд G39 G130 30 31 32 33 34 99 188 кислород смесь адаптация катализатор',
+ h:`<div class="sub">Группы из нашего файла меток <code>03C-906-021-CDG.lbl</code>. Мотор прогреть выше <b>80 °C</b>, иначе регулирование не включено и смотреть нечего.</div>
+ <table><tr><th>Канал</th><th>Что</th><th>Норма</th></tr>
+ <tr><td><code>030.1</code></td><td>Напряжение зонда 1 (до катализатора)</td><td>на бензине <b>скачки 0,1–0,9 В</b>, несколько раз в секунду</td></tr>
+ <tr><td><code>031.1</code> / <code>031.2</code></td><td>Лямбда фактическая / номинальная</td><td><b>0,97–1,03</b> при номинале 1,00</td></tr>
+ <tr><td><code>032.1</code></td><td>Адаптация, холостой ход</td><td><b>−10…+10 %</b>, в идеале около 0</td></tr>
+ <tr><td><code>032.2</code></td><td>Адаптация, частичная нагрузка</td><td><b>−10…+10 %</b></td></tr>
+ <tr><td><code>033.1</code> / <code>033.2</code></td><td>Величина регулирования / напряжение зонда до кат.</td><td>±10 % / скачки 0,1–0,9 В</td></tr>
+ <tr><td><code>034.1</code></td><td>Зонд после катализатора</td><td><b>0,6–0,8 В и почти не колеблется</b> — в этом вся разница с передним</td></tr>
+ <tr><td><code>099.3</code></td><td>Сводка: лямбда-регулятор</td><td>±10 %</td></tr>
+ <tr><td><code>188.1</code></td><td>Лямбда в газовом режиме</td><td><b>0,97–1,03</b></td></tr></table>
+ <div class="warn"><b>Как развести «зонд умер» и «смесь кривая»</b><br>
+ Передний зонд <b>стоит ровно</b> или колеблется вяло (меньше двух переходов в секунду) → зонд.<br>
+ Передний скачет нормально, но адаптации <code>032</code> уехали в <b>плюс</b> → система льёт больше топлива, компенсируя бедную смесь: ищи <b>подсос воздуха</b>.<br>
+ Адаптации уехали в <b>минус</b> → богато: льют форсунки, высокое давление, датчики.<br>
+ Задний зонд повторяет рисунок переднего (так же пилит) → <b>катализатор не работает</b>, сам зонд при этом исправен.</div>
+ <div class="sub" style="margin-top:10px"><b>Порядок работы</b></div>
+ <table><tr><th>Шаг</th><th>Что делать</th><th>Что считать нормой</th></tr>
+ <tr><td>1</td><td>Прогреть до ОЖ выше 80 °C, дать поработать на ХХ минуту</td><td>до этого момента регулирование выключено, замеры бессмысленны</td></tr>
+ <tr><td>2</td><td>Открыть <code>099</code> и убедиться, что регулирование включено</td><td>значение в поле 3 шевелится, а не стоит колом</td></tr>
+ <tr><td>3</td><td>Снять <code>030</code> на ХХ, 30 секунд</td><td>не менее двух переходов 0,1 ↔ 0,9 В в секунду</td></tr>
+ <tr><td>4</td><td>Снять <code>034</code> там же</td><td>ровные 0,6–0,8 В без пилы</td></tr>
+ <tr><td>5</td><td>Записать <code>032.1</code> и <code>032.2</code> до любых сбросов памяти</td><td>обе в пределах ±10 %</td></tr>
+ <tr><td>6</td><td>Поднять 2500–3000 об/мин и подержать, повторить пункты 3–5</td><td>на нагрузке картина не должна разваливаться</td></tr>
+ <tr><td>7</td><td>Перейти на газ и снять <code>188.1</code></td><td>0,97–1,03; если на бензине норма, а на газе нет — вопрос к газовой части, а не к зондам</td></tr></table>
+ <div class="sub" style="margin-top:10px"><b>Железо и схема.</b> До катализатора стоит <b>широкополосный G39</b>, разъём на 6 контактов; после катализатора — <b>G130</b>, 4 контакта. На B6 их регулярно путают и меняют не тот <span class="star">*</span>. Распиновка на J623 — в схеме <code>3C0-609151008</code>: G39 с подогревом Z19 на пины T94/75, 57, 78, 56, 79; G130 с подогревом Z29 на T94/34, 62, 29.</div>`},
+
+{s:'Каналы', t:'Цепь ГРМ — условное растяжение', tags:'цепь ГРМ растяжение 93 214 фаза распредвал натяжитель перескок',
+ h:`<div class="sub">Проверка без разборки: по углу фазового положения впускного распредвала. Условия — прогретый мотор, холостой ход, <b>газом не играть</b>.</div>
+ <table><tr><th>Канал</th><th>Что</th><th>Трактовка</th></tr>
+ <tr><td><code>093.1</code></td><td>Фазовое положение распредвала впуска, факт</td><td>по нашим меткам норма <b>±5 от заданного</b></td></tr>
+ <tr><td><code>214</code></td><td>То же + обороты в одном окне</td><td>удобнее для записи графика</td></tr>
+ <tr><td><code>091.3</code> / <code>091.4</code></td><td>Регулятор распредвала: заданное и факт</td><td>факт должен идти за заданным</td></tr></table>
+ <div class="warn"><b>Пороги по практике <span class="star">*</span></b><br>
+ Угол уходит в <b>минус</b> по мере вытягивания цепи. Меньше <b>−3,00°</b> — вскрывать; после замены цепи значение возвращается примерно к <b>+1°</b>. Зафиксирован случай: −3,05° на приборе = перескок на 6 зубьев по факту вскрытия.<br>
+ Метод работает на 1.4 TSI <b>150 л.с.</b> (наш twincharger) и на 1.8/2.0; на 1.4 122 л.с. (CAXA, без компрессора) группы нет.<br>
+ Треск первые секунды после пуска — отдельный самостоятельный признак, прибор тут не нужен.</div>`},
+
+{s:'Каналы', t:'Комплексная диагностика мотора — порядок групп', tags:'комплексная диагностика группы блок 01 нормы обзор проверка мотора',
+ h:`<div class="sub">Один проход по блоку 01 на прогретом моторе. Нормы — из нашего файла меток, не общие.</div>
+ <table><tr><th>Группа</th><th>Что смотрим</th><th>Норма</th></tr>
+ <tr><td><code>001</code></td><td>Обороты ХХ, ОЖ, лямбда-регулирование</td><td><b>680–780 об/мин</b>, <b>85–105 °C</b>, ±10 %</td></tr>
+ <tr><td><code>002</code></td><td>Нагрузка, время впрыска, разрежение</td><td>ХХ <b>15–25 %</b>, <b>2–4 мс</b>, <b>250–400 мбар</b></td></tr>
+ <tr><td><code>003</code></td><td>Дроссель, УОЗ</td><td><b>2–5°</b>, УОЗ <b>4–12°</b> до ВМТ</td></tr>
+ <tr><td><code>004</code></td><td>Напряжение, температуры</td><td><b>13,8–14,8 В</b> на работающем; ниже 12 В — проблема</td></tr>
+ <tr><td><code>009</code></td><td>Уровень масла, суммарный расход</td><td>—</td></tr>
+ <tr><td><code>014</code> / <code>015</code> / <code>016</code></td><td>Пропуски: общий счётчик и по цилиндрам</td><td><b>0</b>; счётчик живёт только при ОЖ &gt; 80 °C</td></tr>
+ <tr><td><code>020</code></td><td>УОЗ по цилиндрам</td><td>разброс между цилиндрами <b>менее 3°</b></td></tr>
+ <tr><td><code>026</code></td><td>Усиление датчика детонации</td><td>на ХХ <b>менее 5</b> по каждому</td></tr>
+ <tr><td><code>030</code>–<code>034</code>, <code>099</code></td><td>Лямбда — см. отдельную карточку</td><td>—</td></tr>
+ <tr><td><code>093</code> / <code>214</code></td><td>Фаза распредвала — состояние цепи</td><td>см. карточку по цепи</td></tr>
+ <tr><td><code>100</code></td><td>Готовность OBD</td><td><b>00000000</b> = все тесты пройдены</td></tr>
+ <tr><td><code>106</code> / <code>140</code></td><td>Давление бензина в рампе ВД</td><td><b>40–100 бар</b> по нагрузке; на ХХ около 50</td></tr>
+ <tr><td><code>112</code></td><td>Температура отработавших газов</td><td><b>300–650 °C</b> на прогретом</td></tr>
+ <tr><td><code>113</code></td><td>Атмосферное давление по датчику блока</td><td>около <b>1013 мбар</b> — проверка самого датчика</td></tr>
+ <tr><td><code>114</code></td><td>Наддув: нагрузка задан/факт, N75</td><td>факт = заданной <b>±5 %</b>, скважность N75 <b>0–95 %</b></td></tr>
+ <tr><td><code>115</code></td><td>Давление наддува</td><td>под нагрузкой <b>1200–2500 мбар</b>, перед дросселем = заданному ±50</td></tr>
+ <tr><td><code>130</code> / <code>131</code></td><td>Охлаждение: ОЖ на выходе и после радиатора</td><td>см. карточку «Мотор и охлаждение»</td></tr>
+ <tr><td><code>187</code> / <code>241</code> / <code>245</code> / <code>188</code></td><td>Газовая часть</td><td>см. газовые карточки</td></tr>
+ <tr><td><code>236</code></td><td>Муфта компрессора, скважность</td><td>поле 4 — для поиска визга, см. карточку по ремню</td></tr></table>
+ <div class="warn">Порядок осмысленный: сначала <code>001</code>–<code>004</code> — живой ли мотор в базе, потом пропуски и УОЗ, потом смесь, потом наддув и газ. Если <code>004</code> показывает меньше 13,8 В — дальше можно не ходить, сначала генератор и контакты.</div>`},
+
+{s:'Каналы', t:'Подсос воздуха — как найти', tags:'подсос воздуха неучтённый лямбда адаптация 32 дымогенератор впуск герметичность бедная смесь',
+ h:`<div class="sub">Неучтённый воздух = бедная смесь = блок добавляет топливо. Прибор показывает это раньше, чем появляется ошибка.</div>
+ <table><tr><th>Признак</th><th>Где смотреть</th><th>Что означает</th></tr>
+ <tr><td>Адаптация на ХХ ушла в плюс</td><td><code>032.1</code></td><td>больше +10 % — подсос есть; чем ближе к дросселю, тем сильнее именно на ХХ</td></tr>
+ <tr><td>На частичной нагрузке плюс меньше</td><td><code>032.2</code></td><td>типично для подсоса: на нагрузке его доля в общем потоке падает</td></tr>
+ <tr><td>Нагрузка на ХХ выше нормы</td><td><code>002.2</code></td><td>норма 15–25 %; выше — лишний воздух либо тугой мотор</td></tr>
+ <tr><td>Разрежение слабое</td><td><code>002.4</code> / <code>003.2</code></td><td>норма 250–400 мбар; больше (ближе к атмосфере) — негерметичность впуска</td></tr>
+ <tr><td>Наддув не добирает</td><td><code>114.3</code> / <code>115.4</code></td><td>утечка уже в напорном тракте: патрубки, интеркулер, хомуты</td></tr></table>
+ <div class="warn"><b>Порядок поиска на нашем моторе <span class="star">*</span></b><br>
+ 1. <b>Клапан вентиляции картерных газов</b> — у этой серии самый частый источник, см. отдельную карточку.<br>
+ 2. Патрубки между турбиной, компрессором, интеркулером и дросселем — трещины по гофрам и сорванные хомуты.<br>
+ 3. Вакуумные шланги: привод перепускного клапана, тормозной усилитель, клапан N249.<br>
+ 4. Прокладка впускного коллектора и уплотнение ТНВД в головке.<br>
+ 5. Уплотнения форсунок — на прямом впрыске дают подсос в цилиндр, а не во впуск, и ловятся по пропускам в одном цилиндре.<br>
+ Инструмент: дымогенератор под 0,5 бар. На слух и на ощупь трещину в гофре найти почти нельзя.</div>`},
+
+{s:'Процедуры', t:'Картерные газы: проверка, чистка, и почему потеет маслозаливная пробка', tags:'КВКГ картерные газы маслоотделитель мембрана сапун давление в картере масло сопливит пробка щуп выдавливает',
+ h:`<div class="sub">На этой серии моторов маслоотделитель с мембраной встроен в крышку клапанов. Мембрана дубеет от температуры и рвётся — это штатная болячка семейства 1.2/1.4/1.6 TSI <span class="star">*</span>.</div>
+ <div class="sub"><b>Проверка за пять минут</b></div>
+ <table><tr><th>Что делаем</th><th>Исправно</th><th>Неисправно</th></tr>
+ <tr><td>На работающем ХХ отвернуть маслозаливную пробку</td><td>лёгкое разрежение, обороты почти не меняются</td><td>крышку <b>присасывает</b>, слышен свист, обороты плавают → мембрана порвана</td></tr>
+ <tr><td>Положить на горловину лист бумаги</td><td>бумагу слегка подтягивает</td><td>бумагу <b>выдувает</b> → избыточное давление в картере</td></tr>
+ <tr><td>Вынуть щуп на работающем моторе</td><td>из трубки почти ничего не идёт</td><td>ощутимый выхлоп газов → давление в картере</td></tr>
+ <tr><td>Снять клапан и продуть ртом в обе стороны</td><td>держит в одну сторону</td><td>продувается в обе → обратный клапан мёртв</td></tr></table>
+ <div class="warn"><b>Почему сопливит и потеет пробка — по убыванию вероятности</b><br>
+ 1. <b>Избыточное давление картерных газов</b>: порванная мембрана или забитый маслоотделитель. Газам некуда идти, и они давят масло через самое слабое уплотнение — крышку горловины, щуп, прокладку клапанной крышки.<br>
+ 2. <b>Забит или обмёрз тракт вентиляции</b>: зимой конденсат в трубке превращается в лёд и перекрывает её полностью. Симптом сезонный — появляется в морозы.<br>
+ 3. <b>Задубевшее уплотнение самой пробки</b> — самая дешёвая причина, проверяется осмотром кольца.<br>
+ 4. <b>Перелив масла</b> выше максимума: коленвал вспенивает масло, рост давления и выброс через вентиляцию.<br>
+ 5. <b>Износ ЦПГ (прорыв газов)</b> — последний в списке: у нас компрессия 11–12 бар на 199 226 км, то есть на 2023 год поршневая была здорова.<br>
+ Сначала меряем давление в картере и проверяем клапан, и только потом думаем про кольца.</div>
+ <div class="sub" style="margin-top:10px"><b>Чистка.</b> Снять клапанную крышку, промыть лабиринт маслоотделителя и трубки растворителем, продуть. Оригинал поставляется крышкой в сборе, но в продаже есть ремонтные мембраны отдельно <span class="star">*</span>. После замены первые минуты мотор может работать нестройно, пока не пересчитает адаптации; затем проверить <code>032.1</code> — плюс должен уйти.</div>`},
+
+{s:'DSG', t:'Сцепления DQ200 — проверка по заводским нормам', tags:'DSG DQ200 0AM сцепление износ шток 95 96 97 115 116 117 TPI 2037031 температура пробуксовка',
+ h:`<div class="sub">Блок 02 → измеряемые группы. Методика косвенная: меряем не толщину дисков, а остаток хода штоков. Только для сухого <code>0AM</code> — к мокрой DQ250 не применима.</div>
+ <table><tr><th>Проверка</th><th>Формула</th><th>Норма по TPI 2037031/1</th></tr>
+ <tr><td>Сцепление 1 — зазор</td><td><code>95.1 − 97.1</code></td><td>больше <b>3 мм</b></td></tr>
+ <tr><td>Сцепление 1 — запас на износ</td><td><code>97.2 − 96.3</code></td><td>больше <b>2 мм</b></td></tr>
+ <tr><td>Сцепление 2 — зазор</td><td><code>115.1 − 117.1</code></td><td>больше <b>3 мм</b></td></tr>
+ <tr><td>Сцепление 2 — запас на износ</td><td><code>117.2 − 116.3</code></td><td>больше <b>2 мм</b></td></tr>
+ <tr><td>Коэффициент трения</td><td><code>98.1</code> / <code>118.1</code></td><td>должен быть около <b>1</b></td></tr>
+ <tr><td>Максимальная температура</td><td><code>98.4</code> / <code>118.4</code></td><td>чем меньше, тем лучше</td></tr>
+ <tr><td>Наработка по температурам</td><td><code>099</code>–<code>102</code> / <code>119</code>–<code>122</code></td><td>много часов выше <b>250 °C</b> — сцепления жгли</td></tr></table>
+ <div class="warn"><b>Чему верить.</b> Пороги 3 и 2 мм взяты из <b>TPI 2037031/1</b> (14.04.2014). Там же оговорка: бюллетень адресован A1/A3 с <code>0AM</code> 2009–2011 м.г., для остальных моделей завод отсылает к TPI 2027884 — <b>этого бюллетеня у нас нет</b>. По форумам для 0AM в целом ходят более мягкие пороги 2 и 1 мм <span class="star">*</span>; я держу заводские, они строже.<br>
+ Ориентиры по новому сцеплению <span class="star">*</span>: запас 7–8,5 мм для старой серии (до середины 2011, <code>0AM 198 140</code>) и 5–6,5 мм для поздней; <code>95.1</code> в норме 7–11 мм. Запас меньше 1 мм = диск буксует, максимальный момент уже не передаётся.<br>
+ Прежняя формула в этом мануале (<code>96.2 − 97.3</code>) была форумной и не совпадает с заводской — пользуйся таблицей выше.</div>`},
+
+{s:'Процедуры', t:'Свечи: чтение по цвету на метане', tags:'свечи нагар цвет иридий платина метан калильное число перегрев бедная смесь',
+ h:`<div class="sub"><b>Матчасть.</b> По SSP 425 на EcoFuel поставлены особые свечи: центральный электрод — <b>иридиевый штифт 0,6 мм</b>, боковой — <b>платиновый</b>. Обычные не держат: на метане выше требуемое напряжение пробоя и горячее искра. Ставить «аналог подешевле» здесь нельзя — он сгорит за сезон.</div>
+ <div class="sub"><b>Важно про газ:</b> метан горит чище бензина и сажи почти не даёт. Поэтому привычный «светло-коричневый» эталон на нашей машине не появится — и сам по себе светлый цвет ещё не приговор.</div>
+ <table><tr><th>Что видно</th><th>О чём говорит</th><th>Что делать</th></tr>
+ <tr><td>Светло-серый или бежевый сухой налёт, электрод ровный</td><td>норма для метана</td><td>ничего</td></tr>
+ <tr><td>Светло-коричневый, «корица»</td><td>норма для бензинового режима</td><td>ничего</td></tr>
+ <tr><td>Белёсый <b>крупинчатый</b> сухой налёт</td><td>примеси в газе; на метане встречается часто <span class="star">*</span></td><td>смотреть по остальным признакам, само по себе не дефект</td></tr>
+ <tr><td>Белый <b>глянцевый</b>, «фарфор», оплавление или эрозия электрода</td><td><b>перегрев</b>: ранний УОЗ, бедная смесь, чужое калильное число, проблемы охлаждения</td><td>проверить <code>032</code> на подсос, УОЗ в <code>003</code>/<code>020</code>, охлаждение по <code>131</code>, подтверждить тип свечи</td></tr>
+ <tr><td>Чёрный сухой бархат (сажа)</td><td>богато или слабая искра: катушка, форсунка льёт, фильтр</td><td>смотреть <code>032</code> в минус, пропуски <code>015</code>/<code>016</code></td></tr>
+ <tr><td>Чёрный маслянистый, запах масла</td><td>масло в камере: колпачки, кольца, КВКГ гонит масло</td><td>сначала карточка по картерным газам, потом компрессия</td></tr>
+ <tr><td>Красно-кирпичный</td><td>присадки топлива</td><td>сменить заправку, на газе встречается редко</td></tr>
+ <tr><td>Нагар только на одном цилиндре</td><td>локальная проблема, а не смесь в целом</td><td>сверить с номером цилиндра в <code>015</code>/<code>016</code> — у нас это цил. 2</td></tr></table>
+ <div class="warn">Читать свечи имеет смысл <b>сразу после поездки под нагрузкой</b>, а не после пятиминутного прогрева во дворе — иначе увидишь только нагар холостого хода. Выкручивать по одной и раскладывать по номерам цилиндров.</div>`},
+
+{s:'Процедуры', t:'Свист ремня: как локализовать', tags:'свист визг ремень поликлиновой натяжитель ролик помпа муфта компрессор 236 TPI 2012623',
+ h:`<div class="sub"><b>Матчасть.</b> На CDGA два ремня: поликлиновой привода агрегатов и отдельный ремень привода <b>механического нагнетателя</b>. Плюс помпа с <b>электромагнитной муфтой</b> — она есть не на всех моторах, и именно она даёт самый известный здесь визг.</div>
+ <div class="sub"><b>Заводской сценарий — TPI 2012623/22, прямо по нашему мотору</b></div>
+ <table><tr><th>Шаг</th><th>Что делать</th><th>Результат</th></tr>
+ <tr><td>1</td><td>Открыть капот, опустить стекло водителя, запустить мотор, дать поработать на ХХ</td><td>подготовка</td></tr>
+ <tr><td>2</td><td>Резко нажать акселератор <b>при выжатом сцеплении</b> (у нас DSG — только в движении)</td><td>шум <b>должен</b> проявиться</td></tr>
+ <tr><td>3</td><td>Повторить без выжима сцепления</td><td>шума <b>быть не должно</b></td></tr>
+ <tr><td>4</td><td>Для DSG: 2-я или 3-я передача, <b>2000–2200 об/мин</b>, кратковременные резкие ускорения по секунде, несколько раз</td><td>воспроизведение в движении</td></tr>
+ <tr><td>5</td><td>Параллельно смотреть группу <code>236</code>, поле 4 — состояние муфты компрессора</td><td>видно, замкнута муфта в момент визга или нет</td></tr></table>
+ <div class="warn">Если сценарий сошёлся — визг даёт <b>вибрация анкерной пластины на шкиве помпы с электромагнитной муфтой</b>, лечится заменой помпы. Завод исправил это с двигателя <b>CDGA 025 189</b>; наш мотор заведомо раньше. Нормо-часы для Passat 3C с CDGA в TPI тоже есть: снятие помпы и снятие поликлинового ремня привода компрессора кондиционера.</div>
+ <div class="sub" style="margin-top:10px"><b>Если сценарий не сошёлся — обычный перебор <span class="star">*</span>, по убыванию:</b> ролик натяжителя (люфт, гул при вращении рукой на снятом ремне), подшипник обводного ролика, шкив генератора с обгонной муфтой, сам ремень (трещины, глянец, попавшая жидкость), шкив компрессора кондиционера. Приём: брызнуть водой на ручейковую сторону — если визг на секунду пропал и вернулся, дело в ремне или натяжении; если не изменился — подшипник.</div>`},
+
+{s:'Процедуры', t:'Стойки стабилизатора: нагружать ли при затяжке', tags:'стойки стабилизатора замена затяжка момент нагрузка сайлентблок шаровой палец втулки',
+ h:`<div class="sub"><b>Матчасть, из-за которой весь вопрос.</b> «Затягивать под нагрузкой» требуется там, где соединение идёт через <b>резинометаллический шарнир</b>: сайлентблок закручивается вместе с болтом, и если тянуть на вывешенной подвеске, резина окажется скрученной в рабочем положении и порвётся. Стойка стабилизатора устроена иначе — на обоих концах <b>шаровые пальцы</b>, которым безразлично положение подвески.</div>
+ <table><tr><th>Узел</th><th>Нагружать при затяжке?</th><th>Момент <span class="star">*</span></th></tr>
+ <tr><td>Стойка стабилизатора передняя</td><td><b>нет</b>, можно на подъёмнике</td><td>65 Н·м</td></tr>
+ <tr><td>Стойка стабилизатора задняя</td><td><b>нет</b></td><td>45 Н·м</td></tr>
+ <tr><td>Хомут втулки стабилизатора</td><td>нет</td><td>25 Н·м + доворот 45°</td></tr>
+ <tr><td>Сайлентблоки рычагов, шаровая к кованому рычагу</td><td><b>да</b>, в положении снаряжённой массы</td><td>60 / 100 Н·м по типу рычага</td></tr></table>
+ <div class="warn"><b>Практика установки.</b> Палец проворачивается вместе с гайкой — держать его за внутренний шлиц (Spline/Torx), гайку крутить ключом на 18. Сначала крепят нижний конец к стабилизатору, затем монтировкой подтягивают стабилизатор и ставят верхний. Гайки самоконтрящиеся — ставить новые.<br>
+ Наш артикул из подбора 2023 года: <b>VAG 5Q0 411 315 A</b> (передняя).<br>
+ По брендам из нашей же памятки: хорошие — <b>Lemförder, Moog, TRW/Lucas</b>; не брать SWAG, Febi, Meyle.</div>`},
+
+{s:'Электрика', t:'Климат: холодный воздух в ногах пассажира', tags:'климат climatronic заслонка сервопривод адаптация базовая установка 08 TPI 2016077 ноги пассажира',
+ h:`<div class="sub"><b>Матчасть.</b> У нас <b>Climatronic</b>, двухзонный: температура в каждой зоне задаётся не краном, а <b>заслонками смешения</b> с отдельными сервоприводами. Разная температура слева и справа, или «в ноги холодное, в лицо тёплое» — это почти всегда заслонка или её привод, а не кондиционер и не радиатор печки.</div>
+ <div class="sub"><b>Важная находка по нашей машине.</b> Между сканами блок климата сменился:</div>
+ <table><tr><th>Дата</th><th>Блок 08</th><th>Кодировка</th><th>WSC</th></tr>
+ <tr><td>13.10.2025</td><td>5K0 907 044 <b>BT</b></td><td>0000000002</td><td>05311</td></tr>
+ <tr><td>06.09.2026</td><td>5K0 907 044 <b>CC</b></td><td>0001000002</td><td>00028</td></tr></table>
+ <div class="warn"><b>То есть панель Climatronic меняли.</b> А по <b>TPI 2016077/4</b> после замены панели управления обязательна адаптация: блок 08 → адаптация → <b>канал 1</b>, где <code>0</code> = старое устройство отопления и кондиционирования (до июня 2007, с «старым» сервоприводом), <code>1</code> = новое (с июня 2007). Если значение не то — воздух из дефлекторов пропадает примерно через 30 секунд или регулировка не работает. Это первое, что надо проверить по жалобе на ноги пассажира.</div>
+ <div class="sub" style="margin-top:10px"><b>Порядок работы</b></div>
+ <table><tr><th>Шаг</th><th>Что делать</th><th>Норма</th></tr>
+ <tr><td>1</td><td>Считать ошибки блока 08</td><td>пусто; коды по приводам указывают на конкретную заслонку</td></tr>
+ <tr><td>2</td><td>Проверить адаптацию канала 1 по TPI 2016077/4</td><td>значение соответствует фактическому узлу отопителя</td></tr>
+ <tr><td>3</td><td>Запустить <b>базовую установку</b> приводов заслонок (самокалибровка)</td><td>приводы прогоняются по всему ходу без обрыва</td></tr>
+ <tr><td>4</td><td>Задать 18 °C слева и 28 °C справа, через минуту пощупать потоки</td><td>стороны должны заметно различаться</td></tr>
+ <tr><td>5</td><td>Если одна сторона не реагирует — смотреть привод этой заслонки</td><td>щелчки/жужжание при смене уставки</td></tr></table>`},
+
+{s:'Электрика', t:'Кондиционер слабо холодит и обмерзают трубки — разбор по контуру', tags:'кондиционер слабо холодит обмерзание иней фреон ТРВ компрессор конденсатор осушитель G65 давление',
+ h:`<div class="sub"><b>Матчасть.</b> Контур делится давлением на две стороны: <b>высокую</b> (от компрессора через конденсатор до расширительного клапана) и <b>низкую</b> (от клапана через испаритель обратно в компрессор). Холод рождается не компрессором, а <b>кипением фреона в испарителе</b>. Отсюда правило: судить можно только по <b>паре</b> давлений на работающем компрессоре, одно число не значит ничего.</div>
+ <div class="sub"><b>Что уже известно по нашей машине:</b> в логе 13.10.2025 блок 08 показал давление хладагента <b>3,8 бар</b> при наружной <b>+4 °C</b>. Это статика на заглушённом кондиционере, и она соответствует давлению насыщения R134a при такой температуре — <b>признаков утечки этот замер не даёт</b>, но и ничего не доказывает: мерить надо в работе и летом.</div>
+ <table><tr><th>Низкая сторона</th><th>Высокая сторона</th><th>Причина</th></tr>
+ <tr><td>низкая</td><td>низкая</td><td><b>мало фреона</b> — самая частая причина слабого холода и обмерзания</td></tr>
+ <tr><td>высокая</td><td>низкая</td><td>компрессор не создаёт перепад: изношена клапанная группа или управляющий клапан</td></tr>
+ <tr><td>высокая</td><td>высокая</td><td>перезаправка, грязный конденсатор, не крутят вентиляторы, воздух в системе</td></tr>
+ <tr><td>очень низкая</td><td>высокая</td><td>засор: расширительный клапан или фильтр-осушитель</td></tr>
+ <tr><td>скачет</td><td>скачет</td><td>влага в системе, подмерзает клапан</td></tr></table>
+ <div class="warn"><b>Почему обмерзают трубки.</b> При нехватке фреона давление в испарителе падает, температура кипения уходит в минус, и конденсат на трубке превращается в лёд. Лёд закрывает испаритель по воздуху — холода в салоне становится ещё меньше. Вторая причина того же: <b>воздух через испаритель не идёт</b> — забитый салонный фильтр или грязный сам испаритель. Третья — не отрабатывает датчик температуры испарителя, компрессор не отключается вовремя.</div>
+ <div class="sub" style="margin-top:10px"><b>Порядок проверки</b></div>
+ <table><tr><th>Шаг</th><th>Что делать</th><th>Норма / вывод</th></tr>
+ <tr><td>1</td><td>Салонный фильтр и соты конденсатора перед радиатором</td><td>чистые; пух и тополиный налёт снимают холод сильнее, чем кажется</td></tr>
+ <tr><td>2</td><td>Включить AC, LO, максимум обдува, рециркуляция, обороты 1500–2000</td><td>только так система выходит на максимум</td></tr>
+ <tr><td>3</td><td>Термометр в центральный дефлектор через 5 минут</td><td>при наружной +25 ждём примерно <b>+5…+8 °C</b>; «ледяной» воздух как в чужой машине бывает при рециркуляции и уже охлаждённом салоне</td></tr>
+ <tr><td>4</td><td>Смотреть измеряемые величины блока 08: заданная и фактическая температура после испарителя, давление <span class="star">*</span></td><td>факт должен идти к заданной; если упирается в +10 °C — холод не добирается</td></tr>
+ <tr><td>5</td><td>Проверить включение муфты компрессора и вентиляторов</td><td>муфта щёлкает, вентиляторы крутят на средней скорости</td></tr>
+ <tr><td>6</td><td>Только теперь — манометры на оба контура</td><td>сверять <b>пару</b> по таблице выше</td></tr></table>
+ <div class="warn">Сравнение с чужой машиной — плохой измеритель: у Climatronic в режиме AUTO целевая температура держится по датчикам салона, и «ледяного» потока не будет по определению. Чтобы сравнивать честно — только LO с рециркуляцией и термометр в дефлекторе.</div>`},
+
+{s:'Электрика', t:'Доп. электроподогреватель PTC («фен») — блок 7D', tags:'PTC фен Z35 7D 1K0963235 подогреватель ступени мощность ток 00361 01207 шлюз оснащение',
+ h:`<div class="sub"><b>Что стоит у нас.</b> Автоскан видит адрес <b>7D «Дополнительный отопитель»</b>, деталь <b>1K0 963 235 E</b>, компонент <code>PTC-Element 0404</code>. Ревизия E — это «умная» версия со встроенным блоком управления, которая висит на шине комфорта и сама отвечает на диагностику. Ошибок нет ни в скане 09.10.2025, ни в 06.09.2026.</div>
+ <div class="sub"><b>Матчасть.</b> Элемент <b>Z35</b> стоит за радиатором печки и греет уже идущий в салон воздух. Максимум — <b>1000 Вт</b>, набирается тремя секциями; мощность снижается ступенями до <b>75 / 50 / 25 %</b>. Это PTC: по мере нагрева сопротивление растёт и ток сам падает — так и задумано.</div>
+ <div class="sub"><b>Как он правильно включается <span class="star">*</span></b></div>
+ <table><tr><th>Условие</th><th>Значение</th></tr>
+ <tr><td>Двигатель работает</td><td>обороты выше <b>500</b></td></tr>
+ <tr><td>Наружная температура</td><td>ниже <b>+5 °C</b></td></tr>
+ <tr><td>Температура ОЖ</td><td>ниже <b>75 °C</b></td></tr>
+ <tr><td>Режим климата</td><td>запрос тепла; <b>ECON выключает подогреватель</b></td></tr>
+ <tr><td>Энергобаланс</td><td>защита сети от перегрузки не активна</td></tr>
+ <tr><td>На полные 1000 Вт дополнительно</td><td>высокая скорость вентилятора, обе заслонки на тепло, обороты выше <b>2000</b>, малая нагрузка генератора</td></tr></table>
+ <div class="warn"><b>Почему «работает вполовину» — и это может быть норма.</b> Блок бортсети <b>J519 ограничивает мощность до 50 % первые 4 минуты</b> после пуска. Дальше ЭБУ двигателя срезает ступени по нагрузке генератора: в ODIS это даже оформлено отдельной записью «снижение мощности Z35 по команде J623» и статусом «ограничение функции по энергоменеджменту». У тебя к этому добавляется <b>обогрев лобового стекла</b> — это ещё до 60 А; пока он работает, на «фен» энергии не остаётся по определению.</div>
+ <div class="sub" style="margin-top:10px"><b>Измеряемые величины блока 7D</b> — из файла меток <code>1K0-963-235.lbl</code> установки Васи (Ross-Tech, 2005). Ток показывает сам блок, клещи не нужны.</div>
+ <table><tr><th>Канал</th><th>Что</th><th>Как читать</th></tr>
+ <tr><td><code>001.1</code></td><td>Элемент Z35</td><td>ON / OFF</td></tr>
+ <tr><td><code>001.2</code></td><td>Напряжение клеммы 30</td><td>не ниже <b>12,0 В</b></td></tr>
+ <tr><td><code>001.3</code></td><td><b>Ток элемента Z35</b></td><td>диапазон <b>0…77 А</b>; меньше 0,05 А = выключен, 1…77 А = работает</td></tr>
+ <tr><td><code>001.4</code></td><td><b>Мощность элемента</b></td><td>диапазон <b>0…1000 Вт</b>; меньше 0,5 Вт = выключен, 12…1000 Вт = работает</td></tr>
+ <tr><td><code>002.1</code></td><td>Запрос тепла</td><td>0 = запрос от климата J255 или регулятора, 1 = запроса нет</td></tr>
+ <tr><td><code>002.2</code></td><td>Запрет по температуре ОЖ</td><td>0 = разрешено (ОЖ ниже 75 °C), 1 = запрещено (выше 75 °C)</td></tr>
+ <tr><td><code>002.3</code></td><td>Запрет по оборотам</td><td>0 = разрешено (выше 500 об/мин), 1 = запрещено</td></tr>
+ <tr><td><code>002.4</code></td><td>Запрет по напряжению</td><td>0 = разрешено, 1 = запрещено</td></tr>
+ <tr><td><code>003.1</code></td><td><b>Снижение мощности</b></td><td>100 % = полная; 75 / 50 / 25 % = урезанная; 0 % = выключен</td></tr>
+ <tr><td><code>003.2</code></td><td>Оснащение автомобиля</td><td>AC = с кондиционером, Ht = только отопитель</td></tr>
+ <tr><td><code>004.1</code></td><td>Температура ОЖ</td><td>приходит по CAN от ЭБУ двигателя</td></tr>
+ <tr><td><code>004.2</code></td><td>Обороты двигателя</td><td>приходит по CAN от шлюза J533</td></tr>
+ <tr><td><code>004.3</code></td><td><b>Нагрузка генератора</b></td><td>17…92 % = есть резерв, работает полностью; 92…98 % и выше = работает с урезанной мощностью</td></tr></table>
+ <div class="warn"><b>Вот и ответ на «работает вполовину»:</b> смотреть надо <b>003.1</b> и <b>004.3</b> одновременно. Если <code>003.1</code> показывает 50 %, а <code>004.3</code> — за 92 %, то блок режет мощность по нагрузке генератора, и это штатно. Если же <code>004.3</code> в районе 20–40 %, запреты в <code>002</code> все нулевые, а ток в <code>001.3</code> всё равно вдвое ниже расчётного — вот это уже дефект: отгоревшая секция или непропай на плате.<br>
+ Расчёт для сверки: 1000 Вт при 13,5 В ≈ <b>74 А</b>, половина ≈ 37 А, четверть ≈ 18 А.</div>
+ <div class="sub" style="margin-top:10px"><b>Порядок проверки</b></div>
+ <table><tr><th>Шаг</th><th>Что делать</th><th>Чего ждать</th></tr>
+ <tr><td>1</td><td>Холодный мотор, наружная ниже +5 °C, климат в тепло, ECON выключен</td><td>условия включения выполнены</td></tr>
+ <tr><td>2</td><td>Завести, открыть блок 7D, группа <code>002</code></td><td>все четыре поля — нули, то есть запретов нет</td></tr>
+ <tr><td>3</td><td>Перейти в <code>001</code>, поднять обороты выше 2000, вентилятор на максимум</td><td>ток растёт к 74 А, мощность к 1000 Вт</td></tr>
+ <tr><td>4</td><td>Включить обогрев лобового, посмотреть <code>003.1</code> и <code>004.3</code></td><td>мощность упадёт ступенью, нагрузка генератора вырастет — так и должно быть</td></tr>
+ <tr><td>5</td><td>Прогреть мотор выше 75 °C</td><td><code>002.2</code> станет 1, подогреватель выключится сам</td></tr></table>
+ <div class="warn"><b>Типовые дефекты.</b> Внутри элемента своя плата: греются силовые ключи и шунты, от циклов нагрева трескается пайка. Лечится <b>пропайкой силовых контактов и резисторов</b> — после этого ошибка уходит, фен оживает <span class="star">*</span>. Коды: <b>00361</b> «нагревательный элемент Z35 неисправен» (часто не стирается, пока дефект на месте, потому что блок управления внутри самого элемента) и <b>01207</b> «блок управления дополнительного отопителя — нет связи».<br>
+ Для самостоятельной установки отдельно проверь <b>список оснащения в шлюзе (блок 19)</b>: если PTC там не включён, блок 7D не отвечает; если включён, а физически не подключён — получишь 01207.</div>`},
+
+{s:'Электрика', t:'Подогрев форсунок омывателя — как включается', tags:'подогрев форсунок омывателя жиклёры терморезистор PTC предохранитель зима',
+ h:`<div class="sub"><b>Коротко: кнопки нет и быть не должно.</b> Внутри каждого жиклёра сидит <b>терморезистор PTC</b>. Питание на него подаётся постоянно при включённом зажигании, а дозирует нагрев сам элемент: холодно — сопротивление низкое, ток идёт, жиклёр греется; прогрелся — сопротивление выросло, ток упал.</div>
+ <table><tr><th>Параметр <span class="star">*</span></th><th>Значение</th></tr>
+ <tr><td>Фактическое включение по погоде</td><td>ощутимый нагрев примерно ниже <b>+4…+5 °C</b></td></tr>
+ <tr><td>Ток в первый момент</td><td><b>0,5–0,7 А</b> на жиклёр</td></tr>
+ <tr><td>Ток после прогрева</td><td>около <b>0,2 А</b>; при −15 °C держится около <b>0,32 А</b></td></tr>
+ <tr><td>Сопротивление элемента</td><td>при +20 °C около <b>44,5 Ом</b>, при −16 °C около <b>54–55 Ом</b></td></tr></table>
+ <div class="warn"><b>Как проверить.</b> Включить зажигание на холодной машине и через пару минут потрогать жиклёр — должен быть тёплым. Если нет: мерить ток на разъёме жиклёра (ожидаем 0,5–0,7 А в первые секунды), затем сопротивление самого элемента. По нашей таблице предохранителей питание «нагревательного резистора жиклёров омывателя» идёт через <b>10 А</b> — его и проверять первым.<br>
+ Отдельной кодировки для этой функции нет: регулирование чисто аппаратное, блок управления в процессе не участвует. Если проводки к жиклёрам нет вообще — значит комплектация была без обогрева, и ставится он только вместе с проводкой.</div>`},
+
+{s:'Процедуры', t:'Вася: навигация и функции блока', tags:'вася vcds функции логин доступ адаптация базовые установки измеряемые величины автоскан лог UDS KWP',
+ h:`<div class="sub"><b>Матчасть.</b> Внутри каждого блока одинаковый набор функций с номерами — они не меняются от версии программы и от языка. Половина блоков у нас на старом протоколе KWP, половина на UDS, и набор доступного отличается.</div>
+ <table><tr><th>№</th><th>Функция</th><th>Зачем на этой машине</th></tr>
+ <tr><td><code>02</code></td><td>Память неисправностей</td><td>первым делом и <b>до</b> любых действий: стоп-кадры живут только до стирания</td></tr>
+ <tr><td><code>03</code></td><td>Тест исполнительных механизмов</td><td>щёлкать клапанами, форсунками, приводами заслонок климата</td></tr>
+ <tr><td><code>04</code></td><td>Базовые установки</td><td>газ/бензин принудительно (группы 243 и 244), калибровка заслонок, адаптация дросселя</td></tr>
+ <tr><td><code>05</code></td><td>Стереть коды</td><td>только после того, как выгружен автоскан</td></tr>
+ <tr><td><code>07</code></td><td>Кодирование</td><td>длинное кодирование блоков, см. карточки кодировок</td></tr>
+ <tr><td><code>08</code></td><td>Измеряемые величины</td><td>основной рабочий режим: группы из наших карточек</td></tr>
+ <tr><td><code>10</code></td><td>Адаптация</td><td>каналы: климат по TPI 2016077, overboost ABS, пробег и прочее</td></tr>
+ <tr><td><code>11</code></td><td><b>Логин</b></td><td>вход в закрытую область на блоках KWP — коды в соседней карточке</td></tr>
+ <tr><td><code>15</code></td><td>Готовность</td><td>мониторы OBD, у нас сейчас не добраны</td></tr>
+ <tr><td><code>16</code></td><td><b>Доступ</b></td><td>то же, что логин, но на блоках UDS</td></tr></table>
+ <div class="warn"><b>Порядок, который экономит время</b><br>
+ 1. Полный автоскан и сохранить файл — это слепок «как было».<br>
+ 2. Выписать стоп-кадры нужных кодов, они одноразовые.<br>
+ 3. Только потом лезть в измеряемые величины и тесты.<br>
+ 4. Логин — строго перед той функцией, ради которой он нужен: после выхода из блока доступ закрывается.<br>
+ <b>Про UDS-блоки:</b> у них классические «Измеряемые блоки» часто пусты, читать надо через «Дополнительные измеряемые величины» и собирать набор каналов вручную.<br>
+ <b>Про логи:</b> для записи графика нужна версия <b>19.6</b> — в более поздних сохранение значений в файл сломано.</div>`},
+
+{s:'Процедуры', t:'Логины к закрытым областям — коды и что открывают', tags:'логин пароль доступ закрытые области 27971 31347 40168 50403 19283 13861 коды блоков',
+ h:`<div class="sub"><b>Зачем это нужно.</b> Часть адаптаций и базовых установок закрыта кодом: блок примет изменение только после функции <code>11</code> (или <code>16</code> на UDS). Коды не секретные в прямом смысле — это сервисные логины VW, у нас они лежат в <code>diag/пароли-на-блоки.jpg</code> и <code>diag/Коды-закрытых-областей-VCDS.pdf</code>.</div>
+ <div class="sub"><b>По блокам, которые реально есть на нашей машине</b></div>
+ <table><tr><th>Адрес</th><th>Код</th><th>Что открывает</th></tr>
+ <tr><td><code>01</code> двигатель J623</td><td><b>27971</b></td><td>базовая установка впускного коллектора, сервисные регенерации, закрытые адаптации мотора</td></tr>
+ <tr><td><code>03</code> тормоза J104</td><td><b>40168</b></td><td>базовые установки ABS и калибровка датчика угла G85</td></tr>
+ <tr><td><code>03</code></td><td><b>50403</b></td><td>адаптация канала 21 — режим перегрузки (overboost). Для 1.4 TSI значение <b>4</b></td></tr>
+ <tr><td><code>03</code></td><td><b>70605</b></td><td>адаптация канала 94 — парковочный ассистент рулевого управления</td></tr>
+ <tr><td><code>03</code></td><td><b>40975</b></td><td>адаптация канала 57 — связка с усилителем руля</td></tr>
+ <tr><td><code>03</code></td><td><b>38787</b></td><td>канал 44 — сигнал аварийного торможения</td></tr>
+ <tr><td><code>09</code> бортсеть J519</td><td><b>31347</b></td><td>закрытые адаптации блока бортовой сети (у Audi тот же блок открывается кодом 42013)</td></tr>
+ <tr><td><code>17</code> приборка</td><td><b>13861</b></td><td>канал пробега и сервисные интервалы</td></tr>
+ <tr><td><code>17</code></td><td><b>25327</b></td><td>вторая группа функций приборки</td></tr>
+ <tr><td><code>46</code> комфорт J393</td><td><b>19283</b></td><td>адаптации центрального блока комфорта</td></tr>
+ <tr><td><code>42</code> / <code>52</code> двери</td><td><b>4354</b></td><td>дверные блоки водителя и пассажира (задние — 19173)</td></tr>
+ <tr><td><code>44</code> усилитель руля</td><td><b>19249</b></td><td>адаптации электроусилителя</td></tr>
+ <tr><td><code>55</code> корректор фар</td><td><b>20103</b> / <b>15284</b></td><td>адаптация и приводы AFS</td></tr>
+ <tr><td>Круиз-контроль</td><td><b>11463</b> вкл / <b>16167</b> выкл</td><td>активация и деактивация GRA</td></tr>
+ <tr><td>Сервисный режим</td><td><b>38757</b></td><td>включение режима обслуживания</td></tr>
+ <tr><td>Универсальный</td><td><b>20103</b></td><td>подходит к большинству второстепенных блоков: 05, 08, 10, 14, 18, 19, 42, 52, 69</td></tr></table>
+ <div class="warn"><b>Правила, чтобы не огрести</b><br>
+ Логин действует <b>до выхода из блока</b> — вводить непосредственно перед нужной функцией.<br>
+ Неверный код блок запоминает: после нескольких попыток часть блоков уходит в задержку на минуты, а иммобилайзер и блоки авторизации лучше вообще не перебирать.<br>
+ <b>Перед любой адаптацией записать исходное значение канала</b> — Вася показывает его при чтении, и это единственный способ вернуться назад.<br>
+ Коды по дверям, комфорту и приборке дают доступ к пробегу и охранным функциям: трогать их без нужды не стоит, а на блоке 17 изменение канала пробега — это уже не диагностика.</div>`},
+
+/* ---------- ЧЕК-ЛИСТ ---------- */
+{s:'Чек-лист', t:'План проверки: от дешёвого к дорогому', tags:'чеклист план проверки замеры порядок действий', wide:1,
+ h:`<div class="sub">Отметки и значения сохраняются в браузере. Норма — рядом с полем.</div>
+ <div id="cl"></div>
+ <div class="warn" style="margin-top:12px">Порядок неслучаен: сначала то, что не требует разборки. Редуктор вскрывать последним.</div>`}
+];
+
+const CHECKS = [
+ ['1. Пылезащитная пробка редуктора на месте?','на месте = баг ПО (TPI 2033761); нет = замена',''],
+ ['2. Проверка сервисной акции 20I7 по VIN','замена форсунок и трубки по гарантии завода',''],
+ ['Фильтр заправочного штуцера вычищен иглой','ничего снимать не надо',''],
+ ['241.1 — запрос ЭБУ','бар, ожидаем 5–9','p1'],
+ ['187.3 — факт в рампе','бар, было 10,20','p2'],
+ ['Давление на стоящем моторе, 10 мин','растёт? да/нет','p3'],
+ ['Катушки N361–N363','Ом, норма ≈12','p4'],
+ ['ШИМ на N372 осциллографом','скважность меняется?','p5'],
+ ['140.3 на ХХ','атм, норма 50','p6'],
+ ['140.3 под нагрузкой','атм, норма до 121','p7'],
+ ['Расход газа на ХХ','кг/ч, норма ≥ 0,4','p8'],
+ ['Компрессия по цилиндрам','бар, в 2023 было 11–12','p9'],
+ ['Адаптация качества газа','с, нужно 60, было 29','p10'],
+ ['031.1 / 188.1 — лямбда общая и на газе','норма 0.97–1.03','p11'],
+ ['Свечи зажигания под метан','иридий 0.6 мм + платина (SSP 425)',''],
+ ['Сетка под штуцером ВД промыта','ключ 18',''],
+ ['Пробки под ключ 8 вскрыты и промыты','сфотографировать!','']
+];
+
+const out=document.getElementById('out'), nav=document.getElementById('nav'),
+      q=document.getElementById('q'), none=document.getElementById('none'),
+      clearSearch=document.getElementById('clear-search'),
+      toast=document.getElementById('toast'),
+      toastText=document.getElementById('toast-text');
+
+let toastTimeout;
+function showToast(msg){
+  toastText.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(()=>toast.classList.remove('show'), 2200);
+}
+
+function copyToClipboard(text, label){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showToast(label ? `${label}: ${text}` : `Скопировано: ${text}`));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(`Скопировано: ${text}`);
+  }
+}
+
+const SEC=['Всё',...[...new Set(D.map(x=>x.s))]];
+let cur='Всё';
+
+SEC.forEach(s=>{
+  const b=document.createElement('button');b.textContent=s;
+  if(s===cur)b.className='on';
+  b.onclick=()=>{
+    cur=s;
+    [...nav.children].forEach(x=>x.className='');
+    b.className='on';
+    render();
+  };
+  nav.appendChild(b);
+});
+
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+
+function render(){
+  const term=q.value.trim().toLowerCase();
+  clearSearch.style.display = term ? 'flex' : 'none';
+  out.innerHTML='';let n=0;
+  D.forEach(d=>{
+    if(cur!=='Всё'&&d.s!==cur)return;
+    const hay=(d.t+' '+d.tags+' '+d.h).toLowerCase();
+    if(term&&!hay.includes(term))return;
+    n++;
+    const c=document.createElement('section');
+    c.className='card'+(d.wide?' wide':'');
+    c.innerHTML=`<h2>${d.t}</h2><div class="sub"><span class="tag">${d.s}</span></div>${d.h}`;
+    out.appendChild(c);
+  });
+  none.style.display=n?'none':'block';
+  if(document.getElementById('cl'))buildChecks();
+  if(term)mark(term);
+
+  // Копирование по клику на любой тег <code>
+  out.querySelectorAll('code').forEach(code=>{
+    code.title = 'Нажмите, чтобы скопировать';
+    code.onclick = (e)=>{
+      e.stopPropagation();
+      copyToClipboard(code.textContent.trim());
+    };
+  });
+}
+
+clearSearch.onclick=()=>{
+  q.value='';
+  render();
+  q.focus();
+};
+
+function mark(term){
+  const esc=term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const rx=new RegExp(esc,'gi'), rxTest=new RegExp(esc,'i');
+  const skip={SCRIPT:1,STYLE:1,INPUT:1,TEXTAREA:1,B:0};
+  const walker=document.createTreeWalker(out,NodeFilter.SHOW_TEXT,{
+    acceptNode(n){
+      const p=n.parentElement;
+      if(!p||skip[p.tagName]||p.classList.contains('hl'))return NodeFilter.FILTER_REJECT;
+      return rxTest.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }
+  });
+  const nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(n=>{
+    const s=n.nodeValue, frag=document.createDocumentFragment();
+    let last=0,m; rx.lastIndex=0;
+    while((m=rx.exec(s))){
+      if(m.index>last)frag.appendChild(document.createTextNode(s.slice(last,m.index)));
+      const b=document.createElement('b');b.className='hl';b.textContent=m[0];
+      frag.appendChild(b);
+      last=m.index+m[0].length;
+      if(m.index===rx.lastIndex)rx.lastIndex++;
+    }
+    if(last<s.length)frag.appendChild(document.createTextNode(s.slice(last)));
+    n.parentNode.replaceChild(frag,n);
+  });
+}
+
+// Ключ хранения привязан к тексту пункта, а не к его номеру:
+// при добавлении или удалении строки чужие отметки не съезжают.
+function chkKey(c){
+  return 'chk:'+c[0].toLowerCase().replace(/\s+/g,'_').slice(0,48);
+}
+function valKey(c){
+  return 'val:'+c[0].toLowerCase().replace(/\s+/g,'_').slice(0,48);
+}
+// Разовый перенос со старых индексных ключей chk0/val0.
+function migrateChecks(){
+  if(localStorage.getItem('chk:migrated')==='1')return;
+  CHECKS.forEach((c,i)=>{
+    const oldK='chk'+i, oldV='val'+i;
+    if(localStorage.getItem(oldK)!==null&&localStorage.getItem(chkKey(c))===null)
+      localStorage.setItem(chkKey(c),localStorage.getItem(oldK));
+    if(localStorage.getItem(oldV)!==null&&localStorage.getItem(valKey(c))===null)
+      localStorage.setItem(valKey(c),localStorage.getItem(oldV));
+    localStorage.removeItem(oldK);localStorage.removeItem(oldV);
+  });
+  localStorage.setItem('chk:migrated','1');
+}
+
+function buildChecks(){
+  const box=document.getElementById('cl');if(!box)return;
+  migrateChecks();
+  box.innerHTML='';
+
+  // Верхняя панель с кнопками действий для чек-листа
+  const actions=document.createElement('div');
+  actions.className='cl-header-actions';
+  actions.innerHTML=`
+    <button class="btn-action primary" id="btn-copy-report">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+      Скопировать отчет
+    </button>
+    <button class="btn-action" id="btn-reset-cl">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>
+      Сбросить отметки
+    </button>
+  `;
+  box.appendChild(actions);
+
+  document.getElementById('btn-copy-report').onclick=()=>{
+    let rep = '📋 ЗАМЕРЫ И ПРОВЕРКА PASSAT B6 ECOFUEL:\n\n';
+    CHECKS.forEach((c)=>{
+      const done = localStorage.getItem(chkKey(c))==='1';
+      const val = localStorage.getItem(valKey(c));
+      rep += `${done ? '✅' : '⬜'} ${c[0]}`;
+      if(val) rep += ` -> [${val}]`;
+      rep += ` (${c[1]})\n`;
+    });
+    copyToClipboard(rep, 'Отчет скопирован');
+  };
+
+  document.getElementById('btn-reset-cl').onclick=()=>{
+    if(confirm('Сбросить все отметки и значения в чек-листе?')){
+      CHECKS.forEach((c)=>{
+        localStorage.removeItem(chkKey(c));
+        localStorage.removeItem(valKey(c));
+      });
+      buildChecks();
+      showToast('Чек-лист очищен');
+    }
+  };
+
+  CHECKS.forEach((c,i)=>{
+    const k=chkKey(c), kv=valKey(c), id='chk'+i, idv='val'+i;
+    const row=document.createElement('div');row.className='chk';
+    const done=localStorage.getItem(k)==='1';
+    const saved=(localStorage.getItem(kv)||'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+    row.innerHTML=`<input type="checkbox" id="${id}" ${done?'checked':''}>
+      <div class="t ${done?'done':''}">${c[0]}<span class="n">${c[1]}</span></div>
+      ${c[2]?`<input type="text" id="${idv}" placeholder="—" value="${saved}">`:''}`;
+    box.appendChild(row);
+    row.querySelector('input[type=checkbox]').onchange=e=>{
+      localStorage.setItem(k,e.target.checked?'1':'0');
+      row.querySelector('.t').className='t'+(e.target.checked?' done':'');
+    };
+    const f=row.querySelector('input[type=text]');
+    if(f)f.oninput=e=>localStorage.setItem(kv,e.target.value);
+  });
+}
+
+q.addEventListener('input',render);
+render();
+</script>
+</body>
+</html>
