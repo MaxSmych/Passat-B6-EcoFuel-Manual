@@ -8,6 +8,13 @@
 и разборы по системам, собранные при ремонте конкретной машины. Персональные
 данные автомобиля сюда не входят.
 
+## Быстрый доступ
+
+| Мануал в браузере | Приложение для Android |
+|---|---|
+| <img src="qr/manual.png" width="180"> | <img src="qr/apk.png" width="180"> |
+| [maxsmych.github.io/Passat-B6-EcoFuel-Manual](https://maxsmych.github.io/Passat-B6-EcoFuel-Manual/) | [Passat-EcoFuel-Manual.apk](https://github.com/MaxSmych/Passat-B6-EcoFuel-Manual/raw/main/Passat-EcoFuel-Manual.apk) |
+
 ## Что внутри
 
 | Файл | Что это |
